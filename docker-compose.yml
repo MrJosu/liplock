@@ -1,0 +1,26 @@
+# LipLock — docker compose
+# Запуск / start:   docker compose up -d
+# Интерфейс / UI:   http://localhost:47650
+#
+# Пути слева от двоеточия — твои папки. На Windows (Docker Desktop) пиши их как  D:/Films
+# Paths left of the colon are your folders. On Windows (Docker Desktop) write them as  D:/Films
+
+services:
+  liplock:
+    image: ghcr.io/mrjosu/liplock:latest
+    container_name: liplock
+    restart: unless-stopped
+    ports:
+      - "47650:47650"
+    environment:
+      UI_LANG: ru            # ru | en
+      TRACK_ORDER: rus,eng   # какие языки идут первыми / languages that go first
+      PUID: "1000"           # владелец новых файлов (на Unraid 99) / owner of new files (99 on Unraid)
+      PGID: "1000"           # группа (на Unraid 100) / group (100 on Unraid)
+      TZ: Europe/London
+    volumes:
+      - ./films:/media                 # фильмы / your films
+      # - ./downloads:/media2          # вторая папка, если нужна / optional second folder
+      - ./liplock/input:/watch         # папка-автомат: Фильм/main + Фильм/donors
+      - ./liplock/output:/output       # результаты из папки-автомата
+      - ./liplock/config:/config       # настройки, черновики, история

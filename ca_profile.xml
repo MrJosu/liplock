@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<CommunityApplications>
+  <Profile>LipLock — перенос аудиодорожек и субтитров между разными версиями одного фильма с синхронизацией по звуку. Вопросы и ошибки — в GitHub Issues.
+LipLock moves audio tracks and subtitles between different versions of the same film and syncs them by ear. Questions and bug reports go to GitHub Issues.</Profile>
+  <Icon>https://raw.githubusercontent.com/MrJosu/liplock/main/assets/icon.png</Icon>
+  <WebPage>https://github.com/MrJosu/liplock</WebPage>
+</CommunityApplications>

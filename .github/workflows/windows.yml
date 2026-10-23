@@ -1,0 +1,113 @@
+name: Windows build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Python packages
+        run: pip install pyinstaller flask waitress numpy
+
+      - name: ffmpeg
+        shell: pwsh
+        run: |
+          $url = "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip"
+          Invoke-WebRequest $url -OutFile ffmpeg.zip
+          Expand-Archive ffmpeg.zip -DestinationPath ffmpeg
+          New-Item -ItemType Directory -Force bin | Out-Null
+          Copy-Item (Get-ChildItem ffmpeg -Recurse -Filter ffmpeg.exe | Select-Object -First 1).FullName bin\
+
+      - name: MKVToolNix
+        shell: pwsh
+        run: |
+          choco install mkvtoolnix -y --no-progress
+          Copy-Item "C:\Program Files\MKVToolNix\mkvmerge.exe" bin\
+          bin\mkvmerge.exe -V
+
+      - name: Build LipLock.exe
+        shell: pwsh
+        run: |
+          pyinstaller --noconfirm --onedir --console --name LipLock `
+            --icon docs/icon.ico --paths app `
+            --add-data "app/static;static" `
+            --collect-submodules waitress `
+            app/desktop.py
+          Copy-Item -Recurse bin dist\LipLock\bin
+          Copy-Item LICENSE dist\LipLock\
+          Copy-Item scripts\windows-readme.txt dist\LipLock\README.txt
+
+      - name: Smoke test
+        shell: pwsh
+        run: |
+          function Fail($msg) {
+            $log = ""
+            foreach ($f in "$env:RUNNER_TEMP\out.txt", "$env:RUNNER_TEMP\err.txt") { if (Test-Path $f) { $log += (Get-Content $f -Raw) } }
+            $text = ("$msg`n$log").Trim()
+            if ($text.Length -gt 3000) { $text = $text.Substring($text.Length - 3000) }
+            Write-Host ("::error title=Smoke test::" + ($text -replace "%", "%25" -replace "`r", "" -replace "`n", "%0A"))
+            exit 1
+          }
+          $t = "$env:RUNNER_TEMP\media"
+          New-Item -ItemType Directory -Force $t | Out-Null
+          $ff = "dist\LipLock\bin\ffmpeg.exe"
+          & $ff -v error -y -f lavfi -i "anoisesrc=d=200:c=pink:r=48000:a=0.3:seed=3" "$t\base.wav"
+          & $ff -v error -y -f lavfi -i "color=c=blue:s=320x180:r=24000/1001:d=200" -i "$t\base.wav" -map 0:v -map 1:a -af "atrim=start=0.8,asetpts=PTS-STARTPTS" -t 199 -c:v libx264 -preset ultrafast -c:a ac3 -metadata:s:a:0 language=eng "$t\main.mkv"
+          & $ff -v error -y -f lavfi -i "color=c=red:s=320x180:r=24000/1001:d=200" -i "$t\base.wav" -map 0:v -map 1:a -t 200 -c:v libx264 -preset ultrafast -c:a ac3 -metadata:s:a:0 language=eng "$t\donor.mkv"
+          if (-not (Test-Path "$t\donor.mkv")) { Fail "ffmpeg could not create test files" }
+
+          $env:MEDIA_DIRS = $t
+          $env:CONFIG_DIR = "$env:RUNNER_TEMP\cfg"
+          $p = Start-Process dist\LipLock\LipLock.exe -ArgumentList "--no-browser" -PassThru `
+                 -RedirectStandardOutput "$env:RUNNER_TEMP\out.txt" -RedirectStandardError "$env:RUNNER_TEMP\err.txt"
+          $cfg = $null
+          for ($i = 0; $i -lt 60 -and -not $cfg; $i++) {
+            Start-Sleep -Seconds 2
+            if ($p.HasExited) { Fail "LipLock.exe exited with code $($p.ExitCode)" }
+            try { $cfg = Invoke-RestMethod http://127.0.0.1:47650/api/config } catch { }
+          }
+          if (-not $cfg) { Fail "LipLock.exe did not answer within 120 s" }
+          Write-Host "roots:" ($cfg.roots | ForEach-Object path)
+
+          $body = @{ main = "$t\main.mkv"; donor = "$t\donor.mkv"; src_ref = 1; dst_ref = 1 } | ConvertTo-Json
+          try {
+            $r = Invoke-RestMethod -Method Post -ContentType "application/json" -Body $body http://127.0.0.1:47650/api/analyze -TimeoutSec 300
+          } catch {
+            $detail = $_.ErrorDetails.Message
+            Stop-Process -Id $p.Id -Force
+            Fail "analyze request failed: $($_.Exception.Message) $detail"
+          }
+          Write-Host "analysis:" $r.status $r.delay
+          Stop-Process -Id $p.Id -Force
+          if (-not $r.ok -or [math]::Abs($r.delay + 800) -gt 40) { Fail "unexpected analysis result: $($r | ConvertTo-Json -Depth 4 -Compress)" }
+          Write-Host "Smoke test passed"
+
+      - name: Zip
+        shell: pwsh
+        run: Compress-Archive -Path dist\LipLock -DestinationPath LipLock-windows-x64.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LipLock-windows-x64
+          path: LipLock-windows-x64.zip
+
+      - name: Attach to release
+        if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: LipLock-windows-x64.zip

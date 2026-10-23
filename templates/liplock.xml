@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>LipLock</Name>
+  <Repository>ghcr.io/mrjosu/liplock:latest</Repository>
+  <Registry>https://github.com/MrJosu/liplock/pkgs/container/liplock</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/MrJosu/liplock/issues</Support>
+  <Project>https://github.com/MrJosu/liplock</Project>
+  <Overview>Переносит аудиодорожки и субтитры между разными версиями одного фильма и синхронизирует их по звуку: сам находит сдвиг и разницу частоты кадров (24 / 23.976 / 25 PAL), ловит криво вклеенные озвучки и проверяет каждую новую дорожку в готовом файле. Веб-интерфейс, папка-автомат с черновиками и очередь сборки.&#xD;
+&#xD;
+Moves audio tracks and subtitles between different versions of the same film and syncs them by ear. Web UI, a watch folder that prepares drafts, and a build queue.</Overview>
+  <Category>MediaApp:Video Tools:</Category>
+  <WebUI>http://[IP]:[PORT:47650]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/MrJosu/liplock/main/templates/liplock.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/MrJosu/liplock/main/assets/icon.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="Web UI port" Target="47650" Default="47650" Mode="tcp" Description="Port of the web interface." Type="Port" Display="always" Required="true" Mask="false">47650</Config>
+  <Config Name="Library" Target="/media" Default="/mnt/user/media" Mode="rw" Description="Folder with your films. Shown in the file picker as /media." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/media</Config>
+  <Config Name="Library 2 (optional)" Target="/media2" Default="" Mode="rw" Description="Second folder, for example the downloads pool. Shown as /media2. Leave empty if not needed." Type="Path" Display="always" Required="false" Mask="false"/>
+  <Config Name="Watch folder" Target="/watch" Default="/mnt/user/media/liplock/input" Mode="rw" Description="One folder per film with main/ and donors/ inside. Keep it on the same share or pool as your downloads so moving files is instant." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/media/liplock/input</Config>
+  <Config Name="Output folder" Target="/output" Default="/mnt/user/media/liplock/output" Mode="rw" Description="Where builds from the watch folder are saved." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/media/liplock/output</Config>
+  <Config Name="Config" Target="/config" Default="/mnt/user/appdata/liplock" Mode="rw" Description="Settings, drafts and job history." Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/liplock</Config>
+  <Config Name="Interface language" Target="UI_LANG" Default="ru|en" Mode="" Description="Язык интерфейса по умолчанию (переключается и в самом интерфейсе)." Type="Variable" Display="always" Required="false" Mask="false">ru</Config>
+  <Config Name="Track order" Target="TRACK_ORDER" Default="rus,eng" Mode="" Description="Languages that go first in the finished file, in this order." Type="Variable" Display="advanced" Required="false" Mask="false">rus,eng</Config>
+  <Config Name="PUID" Target="PUID" Default="99" Mode="" Description="User the container writes files as (99 = nobody)." Type="Variable" Display="advanced" Required="false" Mask="false">99</Config>
+  <Config Name="PGID" Target="PGID" Default="100" Mode="" Description="Group the container writes files as (100 = users)." Type="Variable" Display="advanced" Required="false" Mask="false">100</Config>
+  <Config Name="UMASK" Target="UMASK" Default="000" Mode="" Description="Permission mask for new files." Type="Variable" Display="advanced" Required="false" Mask="false">000</Config>
+</Container>

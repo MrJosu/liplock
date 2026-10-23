@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>LipLock</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1024 1024%22%3E%3Crect width=%221024%22 height=%221024%22 rx=%22224%22 fill=%22%2315171b%22/%3E%3Crect x=%22176%22 y=%22420%22 width=%22672%22 height=%22416%22 rx=%2256%22 fill=%22%2322262d%22/%3E%3CclipPath id=%22c%22%3E%3Crect x=%22176%22 y=%22272%22 width=%22672%22 height=%22116%22 rx=%2230%22/%3E%3C/clipPath%3E%3Cg transform=%22rotate%28-10 196 388%29%22%3E%3Cg clip-path=%22url%28%23c%29%22%3E%3Crect x=%22176%22 y=%22272%22 width=%22672%22 height=%22116%22 fill=%22%23eef0f3%22/%3E%3Cpolygon points=%22216,272 274,272 230,388 172,388%22 fill=%22%2315171b%22/%3E%3Cpolygon points=%22334,272 392,272 348,388 290,388%22 fill=%22%2315171b%22/%3E%3Cpolygon points=%22452,272 510,272 466,388 408,388%22 fill=%22%2315171b%22/%3E%3Cpolygon points=%22570,272 628,272 584,388 526,388%22 fill=%22%2315171b%22/%3E%3Cpolygon points=%22688,272 746,272 702,388 644,388%22 fill=%22%2315171b%22/%3E%3Cpolygon points=%22806,272 864,272 820,388 762,388%22 fill=%22%2315171b%22/%3E%3C/g%3E%3C/g%3E%3Ccircle cx=%22200%22 cy=%22406%22 r=%2222%22 fill=%22%23eef0f3%22/%3E%3Crect x=%22271.0%22 y=%22558.3%22 width=%2226%22 height=%2267.7%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22271.0%22 y=%22646.0%22 width=%2226%22 height=%2257.1%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22309.0%22 y=%22528.2%22 width=%2226%22 height=%2297.8%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22309.0%22 y=%22646.0%22 width=%2226%22 height=%2293.2%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22347.0%22 y=%22505.4%22 width=%2226%22 height=%22120.6%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22347.0%22 y=%22646.0%22 width=%2226%22 height=%22120.3%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22385.0%22 y=%22472.6%22 width=%2226%22 height=%22153.4%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22385.0%22 y=%22646.0%22 width=%2226%22 height=%22140.3%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22423.0%22 y=%22450.6%22 width=%2226%22 height=%22175.4%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22423.0%22 y=%22646.0%22 width=%2226%22 height=%22154.1%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22461.0%22 y=%22491.7%22 width=%2226%22 height=%22134.3%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22461.0%22 y=%22646.0%22 width=%2226%22 height=%22162.3%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22499.0%22 y=%22532.3%22 width=%2226%22 height=%2293.7%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22499.0%22 y=%22646.0%22 width=%2226%22 height=%22165.0%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22537.0%22 y=%22491.7%22 width=%2226%22 height=%22134.3%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22537.0%22 y=%22646.0%22 width=%2226%22 height=%22162.3%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22575.0%22 y=%22450.6%22 width=%2226%22 height=%22175.4%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22575.0%22 y=%22646.0%22 width=%2226%22 height=%22154.1%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22613.0%22 y=%22472.6%22 width=%2226%22 height=%22153.4%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22613.0%22 y=%22646.0%22 width=%2226%22 height=%22140.3%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22651.0%22 y=%22505.4%22 width=%2226%22 height=%22120.6%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22651.0%22 y=%22646.0%22 width=%2226%22 height=%22120.3%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22689.0%22 y=%22528.2%22 width=%2226%22 height=%2297.8%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22689.0%22 y=%22646.0%22 width=%2226%22 height=%2293.2%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22727.0%22 y=%22558.3%22 width=%2226%22 height=%2267.7%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3Crect x=%22727.0%22 y=%22646.0%22 width=%2226%22 height=%2257.1%22 rx=%2213.0%22 fill=%22%23ff6358%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#000;
+  --rail:#08090b;
+  --surface:#111317;
+  --raised:#181b20;
+  --line:#262a31;
+  --line-soft:#1c1f25;
+  --text:#eef0f3;
+  --muted:#8b929d;
+  --faint:#5b616b;
+  --amber:#ffb02e;
+  --amber-dim:#3a2a0c;
+  --lock:#3ddc97;
+  --lock-dim:#0f2a1f;
+  --alert:#ff5a5f;
+  --alert-dim:#2e1314;
+  --busy:#6cb8ff;
+  --busy-dim:#13243a;
+  --r-s:6px; --r-m:10px; --r-l:16px;
+  --font:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--black);color:var(--text);font:400 14px/1.5 var(--font);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+::selection{background:var(--amber);color:#000}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- каркас ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh;background:linear-gradient(90deg,var(--rail) 231px,var(--line-soft) 231px 232px,var(--black) 232px)}
+.ic{width:18px;height:18px;flex:none}
+.tree .ic{width:16px;height:16px;color:var(--faint)}
+.draft .lamp-in{display:none;margin-right:8px;vertical-align:2px}
+.rail{background:var(--rail);padding:22px 14px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:11px;padding:0 8px}
+.brand svg{width:30px;height:30px;flex:none}
+.brand b{font-size:17px;font-weight:700;letter-spacing:-.2px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:10px;border:0;background:none;color:var(--muted);text-align:left;padding:9px 10px;border-radius:var(--r-s);cursor:pointer;font-weight:500;font-size:14.5px}
+.nav button svg{width:18px;height:18px;flex:none;opacity:.8}
+.nav button:hover{color:var(--text);background:var(--surface)}
+.nav button.on{color:var(--text);background:var(--surface);box-shadow:inset 2px 0 0 var(--amber)}
+.nav .badge{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--amber);color:#000;font-size:11.5px;font-weight:700;display:grid;place-items:center}
+.nav .badge.soft{background:var(--raised);color:var(--muted)}
+.meter{margin-top:auto;padding:12px 10px;border-top:1px solid var(--line-soft);color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:6px}
+.meter .mt{color:var(--text);font-weight:600;font-size:13px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.meter .mb{height:6px;border-radius:3px;background:var(--surface);border:1px solid var(--line-soft);overflow:hidden}
+.meter .mb>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amber) 0 60%,#ffd27a);transition:width .6s ease}
+.meter .mp{display:flex;justify-content:space-between;gap:8px}
+.meter .mp b{color:var(--amber);font-weight:700}
+.langs{display:flex;gap:2px;padding:3px;background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r-s);align-self:flex-start}
+.langs button{border:0;background:none;color:var(--muted);font-weight:700;font-size:12px;padding:3px 9px;border-radius:4px;cursor:pointer}
+.langs button.on{background:var(--raised);color:var(--text)}
+.view{padding:34px 40px 90px;max-width:1160px;width:100%;min-width:0}
+.head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.head h1{margin:0;font-size:28px;font-weight:600;letter-spacing:-.6px;line-height:1.15}
+.head p{margin:4px 0 0;color:var(--muted);max-width:62ch}
+.head .tools{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- элементы ---------- */
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:8px 14px;border-radius:var(--r-s);cursor:pointer;font-weight:600;font-size:13.5px;white-space:nowrap}
+.btn:hover{border-color:var(--faint)}
+.btn.go{background:var(--amber);border-color:var(--amber);color:#000}
+.btn.go:hover{filter:brightness(1.08)}
+.btn.quiet{background:none;border-color:transparent;color:var(--muted)}
+.btn.quiet:hover{color:var(--text);background:var(--surface)}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+.btn:disabled{opacity:.4;cursor:default;filter:none}
+.lamp{width:9px;height:9px;border-radius:50%;flex:none;background:var(--faint)}
+.lamp.ok{background:var(--lock);box-shadow:0 0 8px var(--lock)}
+.lamp.warn{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.lamp.err{background:var(--alert);box-shadow:0 0 8px var(--alert)}
+.lamp.busy{background:var(--busy);box-shadow:0 0 8px var(--busy);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.panel{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r-l);padding:20px 22px;margin-bottom:14px}
+.panel>h2{margin:0 0 3px;font-size:16px;font-weight:600}
+.panel>.hint{margin:0 0 14px;color:var(--muted);font-size:13px}
+.path{font-size:13px;color:var(--muted);background:var(--black);border:1px solid var(--line-soft);border-radius:var(--r-s);padding:8px 11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl;text-align:left}
+.path b{color:var(--text);font-weight:500}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.facts{display:flex;gap:22px;flex-wrap:wrap;margin:12px 0 14px;font-size:13px;color:var(--muted)}
+.facts span b{display:block;color:var(--text);font-weight:600;font-size:15px}
+input[type=checkbox],input[type=radio]{width:16px;height:16px;accent-color:var(--amber);cursor:pointer;margin:0}
+input[type=text],input[type=number],select{background:var(--black);border:1px solid var(--line);border-radius:var(--r-s);padding:6px 9px;min-width:0}
+input[type=text]:focus,input[type=number]:focus,select:focus{outline:none;border-color:var(--amber)}
+input:disabled,select:disabled{opacity:.4}
+.field{display:flex;flex-direction:column;gap:5px}
+.field>span{font-size:12.5px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px 18px}
+.toggle{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.toggle input{margin-top:3px}
+.toggle small{display:block;color:var(--muted);font-size:12.5px}
+
+/* таблица дорожек */
+.tracks{width:100%;border-collapse:collapse}
+.tracks th{font-size:12px;font-weight:500;color:var(--faint);text-align:left;padding:0 10px 8px;white-space:nowrap}
+.tracks td{padding:7px 10px;border-top:1px solid var(--line-soft);white-space:nowrap;vertical-align:middle}
+.tracks td.c,.tracks th.c{text-align:center;width:1%}
+.tracks tr.off td:not(.c){color:var(--faint)}
+.tracks tr.off input[type=text]{opacity:.4}
+.scroll{overflow-x:auto;margin:0 -10px}
+.kind{font-size:12px;font-weight:600;padding:2px 8px;border-radius:5px;background:var(--raised)}
+.kind.video{color:var(--busy)} .kind.audio{color:var(--amber)} .kind.subtitles{color:var(--lock)}
+.sub{color:var(--faint);font-size:12px}
+
+/* донор и синхронизация */
+.donor{border:1px solid var(--line);border-radius:var(--r-m);padding:16px;margin-top:12px;background:var(--black)}
+.donor-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:6px}
+.donor-top .nm{font-weight:600;word-break:break-all}
+.sync{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.verdict{display:flex;gap:10px;align-items:flex-start;margin:12px 0 4px;font-size:13.5px}
+.verdict .lamp{margin-top:6px}
+.verdict b{font-weight:600}
+.verdict p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.offset{font-size:26px;font-weight:600;letter-spacing:-.5px;line-height:1}
+.offset small{font-size:13px;color:var(--muted);font-weight:500;letter-spacing:0;margin-left:6px}
+
+/* линейка синхронизации */
+.ruler{position:relative;height:46px;margin:10px 0 2px}
+.ruler svg{width:100%;height:100%;display:block}
+.ruler .ax{stroke:var(--line);stroke-width:1}
+.ruler .tk{stroke:var(--faint);stroke-width:1}
+.ruler .pt{fill:var(--lock)} .ruler .pt.bad{fill:var(--amber)}
+.ruler-legend{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint)}
+.mini{height:18px;width:150px;flex:none}
+.mini svg{width:100%;height:100%;display:block}
+
+/* черновики */
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r-m);margin-bottom:10px}
+.drafts{border:1px solid var(--line-soft);border-radius:var(--r-l);overflow:hidden;background:var(--surface)}
+.draft{display:grid;grid-template-columns:auto auto 1fr auto auto;gap:14px;align-items:center;padding:15px 18px;border-top:1px solid var(--line-soft)}
+.draft:first-child{border-top:0}
+.draft:hover{background:var(--raised)}
+.draft .title{font-weight:600;font-size:15px;word-break:break-word;cursor:pointer}
+.draft .title:hover{color:var(--amber)}
+.draft .what{color:var(--muted);font-size:12.5px;margin-top:2px;display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:2px 8px;border-radius:5px;background:var(--black);border:1px solid var(--line-soft);color:var(--muted)}
+.chip b{color:var(--text);font-weight:600}
+.state{font-size:12.5px;color:var(--muted);white-space:nowrap;text-align:right}
+.state.ok{color:var(--lock)} .state.warn{color:var(--amber)} .state.err{color:var(--alert)} .state.busy{color:var(--busy)}
+.bar{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:6px;width:120px;margin-left:auto}
+.bar>i{display:block;height:100%;background:var(--amber);transition:width .5s}
+.empty{padding:44px 20px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--text);font-size:16px;font-weight:600;margin-bottom:6px}
+.folders{margin-top:22px}
+.folders h3{font-size:14px;font-weight:600;margin:0 0 8px;color:var(--muted)}
+.fl{display:flex;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--line-soft);font-size:13.5px}
+.fl:first-of-type{border-top:0}
+
+/* очередь */
+.job{border:1px solid var(--line-soft);background:var(--surface);border-radius:var(--r-m);padding:14px 16px;margin-bottom:8px}
+.job.live{border-color:var(--line)}
+.job-top{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.job-top .title{font-weight:600;flex:1;min-width:180px;word-break:break-word}
+.job .progress{height:6px;border-radius:3px;background:var(--black);overflow:hidden;margin:12px 0 6px;border:1px solid var(--line-soft)}
+.job .progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--amber) 0 60%,#ffd27a);transition:width .5s}
+.job .phase{font-size:12.5px;color:var(--muted)}
+.job .out{font-size:12.5px;color:var(--lock);word-break:break-all;margin-top:6px}
+.job .err{font-size:13px;color:var(--alert);margin-top:6px}
+.job pre{max-height:260px;overflow:auto;background:var(--black);border:1px solid var(--line-soft);border-radius:var(--r-s);padding:10px 12px;font:12px/1.55 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;margin:10px 0 0;color:#c7ccd4}
+.check{margin-top:10px;padding:10px 12px;border-radius:var(--r-s);background:var(--black);border:1px solid var(--line-soft);font-size:13px}
+.check-item{display:flex;gap:8px;align-items:baseline;margin-top:6px;color:var(--muted)}
+.check-item b{color:var(--text);font-weight:600}
+.check-item .lamp{flex:none;transform:translateY(-1px)}
+.section-label{font-size:13px;color:var(--faint);margin:22px 0 8px}
+
+/* дерево папок в настройках */
+.tree{background:var(--black);border:1px solid var(--line-soft);border-radius:var(--r-m);padding:14px 16px;font-size:13.5px;line-height:1.9}
+.tree div{display:flex;gap:8px;align-items:center}
+.tree .i1{padding-left:20px} .tree .i2{padding-left:40px}
+.tree em{font-style:normal;color:var(--faint);margin-left:8px;font-size:12.5px}
+.tree .f{color:var(--muted)}
+
+/* выбор файла */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
+.modal-bg.on{display:flex}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);width:min(780px,100%);max-height:86vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.8)}
+.modal-head{padding:16px 18px;border-bottom:1px solid var(--line-soft);display:flex;flex-direction:column;gap:10px}
+.modal-list{overflow:auto;flex:1}
+.entry{display:flex;gap:12px;align-items:center;padding:10px 18px;cursor:pointer;border-top:1px solid var(--line-soft)}
+.entry:first-child{border-top:0}
+.entry:hover,.entry:focus-visible{background:var(--raised);outline:none}
+.entry .ic{width:18px;height:18px;flex:none;color:var(--faint)}
+.entry.file .ic{color:var(--amber)}
+.entry .nm{flex:1;word-break:break-all}
+.entry .sz{color:var(--faint);font-size:12.5px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,10px);background:var(--text);color:#000;padding:10px 16px;border-radius:var(--r-s);font-weight:600;z-index:30;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;max-width:90vw}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .app{background:var(--black);grid-template-columns:minmax(0,1fr)}
+  .rail{min-width:0}
+  .nav{min-width:0}
+  .rail{position:sticky;height:auto;flex-direction:row;align-items:center;padding:10px 12px;gap:10px;z-index:10;border-bottom:1px solid var(--line-soft)}
+  .draft>.lamp{display:none}
+  .draft .lamp-in{display:inline-block}
+  .brand b,.meter{display:none}
+  .langs{margin-left:auto;flex:none}
+  .brand{padding:0}
+  .nav{flex-direction:row;overflow-x:auto;gap:2px}
+  .nav button{padding:8px 10px;font-size:13.5px;white-space:nowrap}
+  .nav button svg{display:none}
+  .nav button.on{box-shadow:inset 0 -2px 0 var(--amber)}
+  .view{padding:22px 16px 80px}
+  .head h1{font-size:23px}
+  .draft{grid-template-columns:auto 1fr;gap:8px 12px;align-items:start}
+  .draft>input{margin-top:4px}
+  .draft .mini{display:none}
+  .draft .state{grid-column:2}
+  .draft .state{text-align:left}
+  .draft .bar{margin-left:0}
+  .draft .acts{grid-column:1/-1;justify-content:flex-end}
+  .panel{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand">
+      <svg viewBox="0 0 1024 1024" aria-hidden="true"><rect width="1024" height="1024" rx="224" fill="#15171b"/><rect x="176" y="420" width="672" height="416" rx="56" fill="#22262d"/><clipPath id="ll-clip"><rect x="176" y="272" width="672" height="116" rx="30"/></clipPath><g transform="rotate(-10 196 388)"><g clip-path="url(#ll-clip)"><rect x="176" y="272" width="672" height="116" fill="#eef0f3"/><polygon points="216,272 274,272 230,388 172,388" fill="#15171b"/><polygon points="334,272 392,272 348,388 290,388" fill="#15171b"/><polygon points="452,272 510,272 466,388 408,388" fill="#15171b"/><polygon points="570,272 628,272 584,388 526,388" fill="#15171b"/><polygon points="688,272 746,272 702,388 644,388" fill="#15171b"/><polygon points="806,272 864,272 820,388 762,388" fill="#15171b"/></g></g><circle cx="200" cy="406" r="22" fill="#eef0f3"/><rect x="271.0" y="558.3" width="26" height="67.7" rx="13.0" fill="#ff6358"/><rect x="271.0" y="646.0" width="26" height="57.1" rx="13.0" fill="#ff6358"/><rect x="309.0" y="528.2" width="26" height="97.8" rx="13.0" fill="#ff6358"/><rect x="309.0" y="646.0" width="26" height="93.2" rx="13.0" fill="#ff6358"/><rect x="347.0" y="505.4" width="26" height="120.6" rx="13.0" fill="#ff6358"/><rect x="347.0" y="646.0" width="26" height="120.3" rx="13.0" fill="#ff6358"/><rect x="385.0" y="472.6" width="26" height="153.4" rx="13.0" fill="#ff6358"/><rect x="385.0" y="646.0" width="26" height="140.3" rx="13.0" fill="#ff6358"/><rect x="423.0" y="450.6" width="26" height="175.4" rx="13.0" fill="#ff6358"/><rect x="423.0" y="646.0" width="26" height="154.1" rx="13.0" fill="#ff6358"/><rect x="461.0" y="491.7" width="26" height="134.3" rx="13.0" fill="#ff6358"/><rect x="461.0" y="646.0" width="26" height="162.3" rx="13.0" fill="#ff6358"/><rect x="499.0" y="532.3" width="26" height="93.7" rx="13.0" fill="#ff6358"/><rect x="499.0" y="646.0" width="26" height="165.0" rx="13.0" fill="#ff6358"/><rect x="537.0" y="491.7" width="26" height="134.3" rx="13.0" fill="#ff6358"/><rect x="537.0" y="646.0" width="26" height="162.3" rx="13.0" fill="#ff6358"/><rect x="575.0" y="450.6" width="26" height="175.4" rx="13.0" fill="#ff6358"/><rect x="575.0" y="646.0" width="26" height="154.1" rx="13.0" fill="#ff6358"/><rect x="613.0" y="472.6" width="26" height="153.4" rx="13.0" fill="#ff6358"/><rect x="613.0" y="646.0" width="26" height="140.3" rx="13.0" fill="#ff6358"/><rect x="651.0" y="505.4" width="26" height="120.6" rx="13.0" fill="#ff6358"/><rect x="651.0" y="646.0" width="26" height="120.3" rx="13.0" fill="#ff6358"/><rect x="689.0" y="528.2" width="26" height="97.8" rx="13.0" fill="#ff6358"/><rect x="689.0" y="646.0" width="26" height="93.2" rx="13.0" fill="#ff6358"/><rect x="727.0" y="558.3" width="26" height="67.7" rx="13.0" fill="#ff6358"/><rect x="727.0" y="646.0" width="26" height="57.1" rx="13.0" fill="#ff6358"/></svg>
+      <b>LipLock</b>
+    </div>
+    <nav class="nav" data-i18n-aria="nav.aria">
+      <button data-view="drafts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span data-i18n="nav.drafts"></span><span class="badge hidden" id="bDrafts"></span></button>
+      <button data-view="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="nav.manual"></span></button>
+      <button data-view="queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span data-i18n="nav.queue"></span><span class="badge soft hidden" id="bQueue"></span></button>
+      <button data-view="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span data-i18n="nav.rules"></span></button>
+    </nav>
+    <div class="meter" id="meter">
+      <div class="mt" id="meterTitle"></div>
+      <div class="mb"><i id="meterFill"></i></div>
+      <div class="mp"><span id="meterText"></span><b id="meterPct"></b></div>
+    </div>
+    <div class="langs" role="group" aria-label="Language"><button data-lang="ru">RU</button><button data-lang="en">EN</button></div>
+  </aside>
+
+  <main class="view">
+    <section id="v-drafts">
+      <div class="head">
+        <div><h1 data-i18n="drafts.title"></h1><p data-i18n="drafts.sub"></p></div>
+        <div class="tools"><button class="btn" id="batchBtn" data-i18n="drafts.batch"></button><button class="btn" id="scanNow" data-i18n="drafts.scan"></button></div>
+      </div>
+      <div class="toolbar" id="draftBar">
+        <label class="toggle" style="align-items:center"><input type="checkbox" id="selAll"> <span data-i18n="drafts.allready"></span></label>
+        <span class="grow"></span>
+        <button class="btn go" id="queueSel" disabled></button>
+      </div>
+      <div class="drafts" id="draftList"></div>
+      <div class="folders hidden" id="folderBox"><h3 data-i18n="drafts.notyet"></h3><div id="folderList"></div></div>
+    </section>
+
+    <section id="v-edit" class="hidden">
+      <div class="head">
+        <div><h1 id="edTitle"></h1><p id="edSub"></p></div>
+        <div class="tools" id="edTools"></div>
+      </div>
+      <div class="panel">
+        <h2 data-i18n="ed.main"></h2>
+        <p class="hint" data-i18n="ed.main.hint"></p>
+        <div class="row">
+          <div class="path grow" id="mainPath"></div>
+          <button class="btn" id="pickMain" data-i18n="ed.pick"></button>
+        </div>
+        <div id="mainBody"></div>
+      </div>
+      <div class="panel">
+        <h2 data-i18n="ed.donors"></h2>
+        <p class="hint" data-i18n="ed.donors.hint"></p>
+        <div id="donors"></div>
+        <button class="btn" id="addDonor" style="margin-top:14px" disabled data-i18n="ed.adddonor"></button>
+      </div>
+      <div class="panel">
+        <h2 data-i18n="ed.result"></h2>
+        <div class="grid" style="margin-top:12px">
+          <label class="field"><span data-i18n="ed.where"></span>
+            <select id="outMode"><option value="beside" data-i18n="ed.beside"></option><option value="output" data-i18n="ed.tooutput"></option></select></label>
+          <label class="field"><span data-i18n="ed.name"></span><input type="text" id="outName" data-i18n-ph="ed.name.ph"></label>
+          <label class="toggle" style="align-self:end;padding-bottom:6px"><input type="radio" name="dflt" value="keep" checked><span><span data-i18n="ed.keepdefault"></span><small data-i18n="ed.keepdefault.hint"></small></span></label>
+        </div>
+        <div class="verdict hidden" id="summary"></div>
+        <div class="row" style="margin-top:18px">
+          <button class="btn go" id="submit" disabled data-i18n="act.queue"></button>
+          <button class="btn hidden" id="saveDraft" data-i18n="ed.savedraft"></button>
+          <span class="grow"></span>
+          <button class="btn quiet" id="reset"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="v-queue" class="hidden">
+      <div class="head">
+        <div><h1 data-i18n="q.title"></h1><p data-i18n="q.sub"></p></div>
+        <div class="tools"><button class="btn" id="clearDone" data-i18n="q.clear"></button></div>
+      </div>
+      <div id="jobsLive"></div>
+      <div id="jobsDone"></div>
+    </section>
+
+    <section id="v-settings" class="hidden">
+      <div class="head"><div><h1 data-i18n="s.title"></h1><p data-i18n="s.sub"></p></div></div>
+      <div class="panel">
+        <h2 data-i18n="s.layout"></h2>
+        <p class="hint" data-i18n="s.layout.hint"></p>
+        <div class="tree" id="tree"></div>
+      </div>
+      <div class="panel">
+        <h2 data-i18n="s.drafts"></h2>
+        <p class="hint" data-i18n="s.drafts.hint"></p>
+        <div class="grid">
+          <label class="toggle"><input type="checkbox" id="sEnabled"><span><span data-i18n="s.watch"></span><small data-i18n="s.watch.hint"></small></span></label>
+          <label class="toggle"><input type="checkbox" id="sSubs"><span><span data-i18n="s.subs"></span><small data-i18n="s.subs.hint"></small></span></label>
+          <label class="field"><span data-i18n="s.mode"></span>
+            <select id="sMode"><option value="new" data-i18n="s.mode.new"></option><option value="all" data-i18n="s.mode.all"></option></select></label>
+          <label class="field"><span data-i18n="s.langs"></span><input type="text" id="sLangs" data-i18n-ph="s.langs.ph"></label>
+          <label class="field"><span data-i18n="s.remove"></span><input type="text" id="sRemove" data-i18n-ph="s.remove.ph"></label>
+          <label class="field"><span data-i18n="s.default"></span><input type="text" id="sDefault" data-i18n-ph="s.default.ph"></label>
+        </div>
+      </div>
+      <div class="panel">
+        <h2 data-i18n="s.build"></h2>
+        <div class="grid" style="margin-top:12px">
+          <label class="field"><span data-i18n="s.order"></span><input type="text" id="sOrder" placeholder="rus, eng"><small class="sub" data-i18n="s.order.hint"></small></label>
+          <label class="toggle"><input type="checkbox" id="sAuto"><span><span data-i18n="s.auto"></span><small data-i18n="s.auto.hint"></small></span></label>
+          <label class="field"><span data-i18n="s.parallel"></span>
+            <select id="sParallel"><option value="1" data-i18n="s.parallel.1"></option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label>
+          <label class="field"><span data-i18n="s.after"></span>
+            <select id="sAfter"><option value="keep" data-i18n="s.after.keep"></option><option value="delete" data-i18n="s.after.delete"></option></select></label>
+        </div>
+      </div>
+      <div class="row"><button class="btn go" id="saveSettings" data-i18n="s.save"></button><span class="sub" data-i18n="s.codes"></span></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal-bg" id="picker" role="dialog" aria-modal="true" aria-labelledby="pickTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="row"><b class="grow" id="pickTitle" style="font-size:16px"></b><button class="btn go sm hidden" id="pickThis" data-i18n="pick.this"></button><button class="btn quiet sm" id="pickClose" data-i18n="act.close"></button></div>
+      <div class="row" id="pickRoots"></div>
+      <div class="path" id="pickPath"></div>
+    </div>
+    <div class="modal-list" id="pickList"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ================= переводы / translations ================= */
+const STR = {
+  "nav.aria":["Разделы","Sections"], "nav.drafts":["Черновики","Drafts"], "nav.manual":["Вручную","Manual"],
+  "nav.queue":["Очередь","Queue"], "nav.rules":["Правила","Rules"],
+  "meter.idle":["Сборок нет","Nothing building"], "meter.waiting":["Ждут: {n}","Waiting: {n}"],
+  "meter.more":["и ещё {n} в очереди","{n} more queued"], "meter.parallel":["Собирается: {n}","Building: {n}"],
+  "drafts.title":["Черновики","Drafts"],
+  "drafts.sub":["Подпапки из папки-автомата. Сдвиг уже посчитан — проверь дорожки и отправь в очередь.","Folders from the watch folder. The offset is already measured — check the tracks and queue them."],
+  "drafts.scan":["Проверить папку","Scan folder"], "drafts.allready":["Все готовые","All ready"],
+  "drafts.notyet":["Ещё не черновики","Not drafts yet"],
+  "drafts.empty.t":["Черновиков пока нет","No drafts yet"],
+  "drafts.empty":["Создай в {dir} подпапку фильма с папками main и donors — раскладка показана в правилах.","Create a film folder in {dir} with main and donors inside — the layout is shown under Rules."],
+  "drafts.off":["Слежение за папкой выключено.","Folder watching is off."],
+  "drafts.open":["Открыть","Open"], "drafts.redo":["Заново","Redo"], "drafts.redo.t":["Перечитать файлы и посчитать заново","Re-read files and measure again"],
+  "drafts.del":["Удалить","Delete"],
+  "drafts.del.q":["Удалить черновик? Файлы останутся на месте, папка не будет обработана, пока в ней что-то не изменится.","Delete the draft? Files stay where they are; the folder will not be processed again until something in it changes."],
+  "drafts.reset":["Обработать заново","Process again"], "drafts.reset.t":["Скоро появится черновик","A draft will appear shortly"],
+  "drafts.nothing":["ничего","nothing"], "drafts.mark":["Отметить","Select"],
+  "ds.analyzing":["Считаю сдвиг","Measuring"], "ds.ready":["Готов","Ready"], "ds.attention":["Проверь","Check"], "ds.error":["Ошибка","Error"],
+  "ds.queued":["В очереди","Queued"], "ds.building":["Собирается","Building"], "ds.done":["Собран","Built"], "ds.failed":["Сборка упала","Build failed"],
+  "ds.cancelled":["Отменён","Cancelled"], "ds.donewarn":["Собран, проверь","Built, check"],
+  "act.queue":["В очередь","Queue"], "act.queueN":["В очередь: {n}","Queue {n}"], "act.close":["Закрыть","Close"],
+  "act.remove":["Убрать","Remove"], "act.cancel":["Отменить","Cancel"],
+  "ed.new":["Новая сборка","New build"],
+  "ed.new.sub":["Выбери файлы из медиатеки. Исходники не меняются — получится новый файл.","Pick files from your library. Sources stay untouched — a new file is created."],
+  "ed.draft.sub":["Черновик из папки-автомата. Проверь дорожки и сдвиг, затем отправь в очередь.","Draft from the watch folder. Check tracks and offset, then queue it."],
+  "ed.back":["К черновикам","Back to drafts"], "ed.main":["Основной файл","Main file"],
+  "ed.main.hint":["В него добавляются дорожки. Сними галочки с того, что надо убрать.","Tracks are added to this file. Untick what should be removed."],
+  "ed.pick":["Выбрать","Choose"], "ed.none":["Не выбран","Not selected"],
+  "ed.donors":["Доноры","Donors"], "ed.donors.hint":["Отсюда берутся дорожки. Сдвиг и скорость определяются по совпадению звука.","Tracks are taken from here. Offset and speed are found by matching the audio."],
+  "ed.adddonor":["Добавить донор","Add donor"], "ed.result":["Результат","Result"], "ed.where":["Куда сохранить","Save to"],
+  "ed.beside":["Рядом с основным файлом","Next to the main file"], "ed.tooutput":["В папку «Готовое»","To the output folder"],
+  "ed.name":["Имя файла","File name"], "ed.name.ph":["Как у основного файла","Same as the main file"],
+  "ed.keepdefault":["Дорожку по умолчанию не менять","Keep the default track"], "ed.keepdefault.hint":["Или выбери её кружком в таблицах","Or pick one with the radio buttons"],
+  "ed.savedraft":["Сохранить черновик","Save draft"], "ed.clear":["Очистить","Clear"], "ed.closedraft":["Закрыть без сохранения","Close without saving"],
+  "ed.reading":["Читаю дорожки","Reading tracks"], "ed.ismain":["Это основной файл","That is the main file"],
+  "ed.nodonors":["Пока ни одного донора.","No donors yet."], "ed.pickmainfirst":["Сначала выбери основной файл.","Pick the main file first."],
+  "f.duration":["Длительность","Duration"], "f.size":["Размер","Size"], "f.picture":["Картинка","Picture"],
+  "th.keep":["Оставить","Keep"], "th.take":["Взять","Take"], "th.def":["Осн.","Def."], "th.type":["Тип","Type"], "th.codec":["Кодек","Codec"],
+  "th.ch":["Каналы","Channels"], "th.lang":["Язык","Language"], "th.name":["Название","Name"], "th.rel":["Поправка, мс","Correction, ms"],
+  "th.rel.t":["Своя поправка дорожки к общему сдвигу","Per-track correction added to the donor offset"],
+  "k.video":["Видео","Video"], "k.audio":["Аудио","Audio"], "k.subtitles":["Субтитры","Subtitles"],
+  "ch":["{n} кан.","{n} ch"], "isdefault":["сейчас по умолчанию","current default"], "noname":["Без названия","Untitled"],
+  "nostreams":["Нет аудио и субтитров","No audio or subtitles"],
+  "sync.listening":["Слушаю оба файла","Listening to both files"], "sync.listening.p":["Обычно 10–60 секунд","Usually 10–60 seconds"],
+  "sync.none":["Сверять не по чему","Nothing to compare"],
+  "sync.none.p":["В доноре нет звука. Укажи сдвиг вручную — для внешних субтитров обычно 0.","The donor has no audio. Enter the offset manually — usually 0 for external subtitles."],
+  "sync.src":["Сверять дорожку донора","Compare donor track"], "sync.dst":["с дорожкой основного","with main track"],
+  "sync.redo":["Пересчитать","Re-measure"], "sync.delay":["Сдвиг, мс","Offset, ms"], "sync.speed":["Скорость","Speed"],
+  "sync.custom":["Свой множитель","Custom factor"], "sync.factor":["Множитель","Factor"],
+  "sync.big":["Разница скорости большая: звук будет перекодирован в E-AC3 с исправлением скорости и тона.","Large speed difference: audio will be re-encoded to E-AC3 with speed and pitch corrected."],
+  "sync.fail":["Не удалось проверить","Could not check"],
+  "rel.late":["«{name}» в доноре отстаёт на {ms} мс относительно опорной дорожки — поправка учтена.","“{name}” is {ms} ms late in the donor relative to the reference track — corrected."],
+  "rel.early":["«{name}» в доноре опережает на {ms} мс относительно опорной дорожки — поправка учтена.","“{name}” is {ms} ms early in the donor relative to the reference track — corrected."],
+  "ruler.start":["Начало","Start"], "ruler.legend":["Точки замера: отклонение от итогового сдвига, ±{ms} мс по высоте","Measurement points: deviation from the final offset, ±{ms} ms full height"],
+  "ruler.mini":["Отклонение сдвига по ходу фильма","Offset deviation along the film"], "ruler.pt":["{m} мин: {ms} мс","{m} min: {ms} ms"],
+  "sum.add":["добавится {n} {w}","{n} {w} will be added"], "sum.remove":["уберётся {n}","{n} removed"], "sum.default":["сменится дорожка по умолчанию","default track changes"],
+  "w.track":["дорожка|дорожки|дорожек","track|tracks"],
+  "sum.none":["Пока ничего не меняется","Nothing changes yet"], "sum.busy":["Дождись окончания проверки сдвига.","Wait for the offset check to finish."],
+  "sum.shaky":["У части доноров сдвиг ненадёжный — проверь линейку и значения.","Some donors have an unreliable offset — check the ruler and values."],
+  "sum.go":["Можно отправлять.","Ready to queue."], "sum.tick":["Отметь дорожки для добавления или удаления.","Tick tracks to add or remove."],
+  "q.unchecked":["Сдвиг у части доноров не проверен по звуку. Отправить с указанными значениями?","Some donors were not checked by audio. Queue with the values entered?"],
+  "t.draftqueued":["Черновик в очереди","Draft queued"], "t.queuednext":["В очереди — можно собирать следующий","Queued — you can start the next one"],
+  "t.saved":["Черновик сохранён","Draft saved"], "t.queued":["В очереди","Queued"], "t.queuedN":["В очереди: {n}","Queued: {n}"],
+  "t.failedN":[". Не получилось: {list}",". Failed: {list}"], "t.scanning":["Проверяю папку","Scanning the folder"],
+  "t.rules":["Правила сохранены","Rules saved"], "t.server":["Сервер ответил {code}","Server replied {code}"],
+  "q.title":["Очередь","Queue"], "q.sub":["Сборки идут в фоне — страницу можно закрыть.","Builds run in the background — you can close the page."],
+  "q.clear":["Убрать завершённые","Clear finished"], "q.empty.t":["Сейчас ничего не собирается","Nothing is building"],
+  "q.empty":["Отправь черновик или собери файл вручную.","Queue a draft or build a file manually."], "q.finished":["Завершённые","Finished"],
+  "q.fromdraft":["из черновика","from a draft"], "q.manual":["вручную","manual"], "q.log":["Лог","Log"], "q.hidelog":["Скрыть лог","Hide log"],
+  "q.nolog":["Пока пусто","Empty so far"], "js.queued":["Ждёт","Waiting"], "js.running":["Собирается","Building"], "js.done":["Готово","Done"],
+  "js.failed":["Ошибка","Error"], "js.cancelled":["Отменено","Cancelled"], "js.donewarn":["Готово, есть замечания","Done, with remarks"],
+  "s.title":["Правила","Rules"], "s.sub":["Как папка-автомат готовит черновики и что делает после сборки.","How the watch folder prepares drafts and what happens after a build."],
+  "s.layout":["Как раскладывать файлы","How to lay out files"], "s.layout.hint":["Одна подпапка на фильм. Роли задаёшь ты — по названиям папок.","One folder per film. You set the roles with folder names."],
+  "s.tree.watch":["папка-автомат","watch folder"], "s.tree.film":["любое имя — так будет называться черновик","any name — the draft is named after it"],
+  "s.tree.main":["ровно один файл — в него добавляются дорожки","exactly one file — tracks are added to it"],
+  "s.tree.donors":["один или несколько файлов, откуда берутся дорожки","one or more files to take tracks from"],
+  "s.tree.out":["сюда попадает результат","the result goes here"], "s.tree.example":["Sintel (2010)","Sintel (2010)"],
+  "s.drafts":["Черновики","Drafts"], "s.drafts.hint":["Какие дорожки отмечать заранее. В черновике всё можно поменять.","Which tracks to pre-select. Everything can be changed in the draft."],
+  "s.watch":["Следить за папкой","Watch the folder"], "s.watch.hint":["Новые подпапки превращаются в черновики","New folders become drafts"],
+  "s.subs":["Брать субтитры","Take subtitles"], "s.subs.hint":["Иначе только аудио","Otherwise audio only"],
+  "s.mode":["Что отмечать в донорах","What to tick in donors"], "s.mode.new":["То, чего нет в основном файле","What the main file lacks"],
+  "s.mode.all":["Все аудио и субтитры","All audio and subtitles"], "s.langs":["Только эти языки","Only these languages"],
+  "s.langs.ph":["rus, eng — пусто значит любые","rus, eng — empty means any"], "s.remove":["Убирать из основного","Remove from the main file"],
+  "s.remove.ph":["Например ukr","For example ukr"], "s.default":["Ставить по умолчанию язык","Make this language default"],
+  "s.default.ph":["Например rus","For example rus"], "s.build":["Сборка","Build"],
+  "s.order":["Порядок дорожек в файле","Track order in the file"], "s.order.hint":["Сначала эти языки по порядку, внутри языка — дорожка по умолчанию","These languages first, in order; within a language the default track comes first"],
+  "s.auto":["Собирать без подтверждения","Build without confirmation"], "s.auto.hint":["Только если сдвиг надёжный во всех донорах","Only when the offset is reliable in every donor"],
+  "s.parallel":["Сборок одновременно","Parallel builds"], "s.parallel.1":["1 — бережно к дискам","1 — easy on the disks"],
+  "s.after":["После сборки из папки-автомата","After a watch-folder build"], "s.after.keep":["Оставить исходную подпапку","Keep the source folder"],
+  "s.after.delete":["Удалить исходную подпапку","Delete the source folder"], "s.save":["Сохранить правила","Save rules"],
+  "s.codes":["Коды языков как в MKV: rus, eng, ukr, jpn.","Language codes as in MKV: rus, eng, ukr, jpn."],
+  "pick.main":["Основной файл","Main file"], "pick.donor":["Донор","Donor"], "pick.up":["На уровень выше","Up one level"],
+  "pick.empty":["Здесь нет папок и медиафайлов","No folders or media files here"], "root.watch":["Папка-автомат","Watch folder"], "root.output":["Готовое","Output"],
+  "server.down":["Сервер не отвечает","Server is not responding"],
+  "lang.und":["Не указан","Undefined"],
+  "drafts.batch":["Сезон из папок","Season from folders"], "batch.main":["Папка с основными сериями","Folder with the main episodes"],
+  "batch.donor":["Папка с донорами","Folder with the donors"], "pick.this":["Выбрать эту папку","Choose this folder"],
+  "batch.done":["Черновиков создано: {n}","Drafts created: {n}"], "batch.unpaired":[". Без пары: {list}",". Unpaired: {list}"],
+  "raw":["Вшить как есть, без сверки","Mux as is, no sync check"], "raw.hint":["Для дорожек, уже подогнанных под этот файл","For tracks already synced to this file"],
+};
+const LANGS_RU = {rus:"Русский",eng:"Английский",ukr:"Украинский",bel:"Белорусский",kaz:"Казахский",jpn:"Японский",kor:"Корейский",chi:"Китайский",zho:"Китайский",fre:"Французский",fra:"Французский",ger:"Немецкий",deu:"Немецкий",spa:"Испанский",ita:"Итальянский",pol:"Польский"};
+const LANGS_EN = {rus:"Russian",eng:"English",ukr:"Ukrainian",bel:"Belarusian",kaz:"Kazakh",jpn:"Japanese",kor:"Korean",chi:"Chinese",zho:"Chinese",fre:"French",fra:"French",ger:"German",deu:"German",spa:"Spanish",ita:"Italian",pol:"Polish"};
+let LANG = "en";
+function L(key, p){ const v = STR[key]; let s = v ? v[LANG==="ru"?0:1] : key; if(p) for(const k in p) s = s.split("{"+k+"}").join(p[k]); return s; }
+function plural(n, key){ const f = L(key).split("|"); if(LANG!=="ru") return n===1 ? f[0] : f[1]; const m=n%10, h=n%100; return m===1&&h!==11?f[0]:(m>=2&&m<=4&&(h<12||h>14)?f[1]:f[2]); }
+function applyI18n(){
+  document.documentElement.lang = LANG;
+  $$("[data-i18n]").forEach(el => el.textContent = L(el.dataset.i18n));
+  $$("[data-i18n-ph]").forEach(el => el.placeholder = L(el.dataset.i18nPh));
+  $$("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", L(el.dataset.i18nAria)));
+  $$(".langs button").forEach(b => b.classList.toggle("on", b.dataset.lang===LANG));
+}
+
+/* ================= общее / common ================= */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ls = {get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const ICON_DIR = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+const ICON_UP = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3"/></svg>';
+const ICON_FILE = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>';
+
+let CFG = null;
+let S = blankState();
+let ctx = {kind:"manual"};          // or {kind:"draft", id, name}
+let VIEW = "drafts";
+
+function blankState(){ return {main:null, donors:[], dflt:"keep", outMode:"beside", outName:""}; }
+const dec = s => LANG==="ru" ? s.replace(".", ",") : s;
+function fmtSize(b){ if(b==null) return ""; const u = LANG==="ru" ? ["Б","КБ","МБ","ГБ","ТБ"] : ["B","KB","MB","GB","TB"]; let i=0; while(b>=1024&&i<4){b/=1024;i++} return dec(b.toFixed(i>=3?2:i?1:0))+" "+u[i]; }
+function fmtDur(s){ if(!s) return "—"; s=Math.round(s); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h?h+":":"")+String(m).padStart(h?2:1,"0")+":"+String(x).padStart(2,"0"); }
+function fmtSec(ms){ const s = ms/1000; return (s>0?"+":s<0?"−":"")+dec(Math.abs(s).toFixed(Math.abs(s)>=10?2:3))+(LANG==="ru"?" с":" s"); }
+function langName(l){ if(!l || l==="und") return L("lang.und"); return (LANG==="ru"?LANGS_RU:LANGS_EN)[l] || l; }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),3000); }
+async function api(path, opt={}){
+  const r = await fetch(path, {headers:{"Content-Type":"application/json"}, ...opt, body: opt.body ? JSON.stringify(opt.body) : undefined});
+  let data=null; try{ data = await r.json(); }catch(e){}
+  if(!r.ok) throw new Error((data && data.error) || L("t.server", {code:r.status}));
+  return data;
+}
+const key = t => [t.type, t.lang, t.codec, t.channels].join("|");
+const trackLine = t => `${t.codec} ${t.lang}${t.channels?" "+t.channels+"ch":""}${t.name?" «"+t.name+"»":""}`;
+function factorOf(d){ if(d.speed==="custom") return +d.custom||1; const s=CFG.speeds.find(x=>x.key===d.speed); return s?s.factor:1; }
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+
+/* ================= линейка / sync ruler ================= */
+function ruler(d, mini){
+  const r = d.result; if(!r || !r.points || !r.points.length) return "";
+  const dur = (d.info && d.info.duration) || Math.max(...r.points.map(p=>p.t))*1.08;
+  const f = factorOf(d), W = 1000, H = mini ? 18 : 46, mid = H/2, amp = mini ? 7 : 18;
+  const dev = r.points.map(p => p.delay - (f-1)*p.t*1000 - d.delay);
+  const scale = Math.max(80, ...dev.map(Math.abs));
+  let ticks = "";
+  if(!mini) for(let i=1;i<10;i++){ const x=i*W/10; ticks += `<line class="tk" x1="${x}" x2="${x}" y1="${mid-3}" y2="${mid+3}"/>`; }
+  const pts = r.points.map((p,i) => {
+    const x = Math.min(W-6, Math.max(6, p.t/dur*W)), bad = Math.abs(dev[i]) > 40, h = Math.max(2, Math.abs(dev[i])/scale*amp);
+    return `<rect class="pt${bad?" bad":""}" x="${x-(mini?3:4)}" y="${dev[i]>0?mid-h:mid}" width="${mini?6:8}" height="${h}" rx="1"><title>${L("ruler.pt",{m:(p.t/60).toFixed(1),ms:p.delay})}</title></rect>
+            <circle class="pt${bad?" bad":""}" cx="${x}" cy="${mid}" r="${mini?2.5:3.5}"/>`;
+  }).join("");
+  const svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><line class="ax" x1="0" x2="${W}" y1="${mid}" y2="${mid}"/>${ticks}${pts}</svg>`;
+  if(mini) return `<div class="mini" title="${esc(L("ruler.mini"))}">${svg}</div>`;
+  return `<div class="ruler">${svg}</div><div class="ruler-legend"><span>${L("ruler.start")}</span><span>${L("ruler.legend",{ms:Math.round(scale)})}</span><span>${fmtDur(dur)}</span></div>`;
+}
+
+/* ================= навигация / navigation ================= */
+$$(".nav button").forEach(b => b.onclick = () => show(b.dataset.view));
+function show(v){
+  VIEW = v; ls.set("view", v);
+  const navv = (v==="edit" && ctx.kind==="draft") ? "drafts" : v;   // a draft being edited belongs to Drafts
+  $$(".nav button").forEach(b => b.classList.toggle("on", b.dataset.view===navv));
+  ["drafts","edit","queue","settings"].forEach(n => $("#v-"+n).classList.toggle("hidden", n!==v));
+  if(v==="drafts") loadDrafts();
+  if(v==="queue") loadJobs();
+  if(v==="settings") loadSettings();
+  window.scrollTo({top:0});
+}
+$$(".langs button").forEach(b => b.onclick = async () => {
+  if(b.dataset.lang === LANG) return;
+  try{ await api("/api/settings", {method:"POST", body:{lang:b.dataset.lang}}); }catch(e){}
+  LANG = b.dataset.lang; ls.set("lang", LANG);
+  try{ CFG = await api("/api/config"); }catch(e){}
+  applyI18n(); renderEditor(); loadJobs(); loadDrafts(); if(VIEW==="settings") loadSettings();
+});
+
+/* ================= выбор файла / file picker ================= */
+let pickCb = null, pickCur = null, pickFolder = false;
+function rootLabel(r){ return r.kind==="watch" ? L("root.watch") : r.kind==="output" ? L("root.output") : r.label; }
+function openPicker(title, cb, startDir, opts){
+  pickCb = cb; pickFolder = !!(opts && opts.folder); $("#pickTitle").textContent = title;
+  $("#pickThis").classList.toggle("hidden", !pickFolder);
+  $("#pickRoots").innerHTML = CFG.roots.map(r => `<button class="btn sm" data-p="${esc(r.path)}">${esc(rootLabel(r))}</button>`).join("");
+  $$("#pickRoots button").forEach(b => b.onclick = () => browse(b.dataset.p));
+  $("#picker").classList.add("on");
+  browse(startDir || ls.get("lastDir", CFG.roots[0] ? CFG.roots[0].path : ""));
+}
+function closePicker(){ $("#picker").classList.remove("on"); }
+$("#pickClose").onclick = closePicker;
+$("#pickThis").onclick = () => { const p = pickCur; closePicker(); if(p) pickCb(p); };
+$("#picker").onclick = e => { if(e.target.id==="picker") closePicker(); };
+document.addEventListener("keydown", e => { if(e.key==="Escape") closePicker(); });
+async function browse(path){
+  const list = $("#pickList");
+  list.innerHTML = `<div class="empty"><span class="spin"></span></div>`;
+  let d;
+  try{ d = await api("/api/browse?path="+encodeURIComponent(path)); }
+  catch(e){ if(CFG.roots[0] && path!==CFG.roots[0].path) return browse(CFG.roots[0].path); list.innerHTML=`<div class="empty">${esc(e.message)}</div>`; return; }
+  ls.set("lastDir", d.path); pickCur = d.path;
+  $("#pickPath").innerHTML = `<bdi><b>${esc(d.path)}</b></bdi>`;
+  let h = d.parent ? `<div class="entry" tabindex="0" data-dir="${esc(d.parent)}">${ICON_UP}<span class="nm">${L("pick.up")}</span></div>` : "";
+  h += d.dirs.map(x => `<div class="entry" tabindex="0" data-dir="${esc(x.path)}">${ICON_DIR}<span class="nm">${esc(x.name)}</span></div>`).join("");
+  if(!pickFolder) h += d.files.map(f => `<div class="entry file" tabindex="0" data-file="${esc(f.path)}">${ICON_FILE}<span class="nm">${esc(f.name)}</span><span class="sz">${fmtSize(f.size)}</span></div>`).join("");
+  if(!d.dirs.length && !d.files.length) h += `<div class="empty">${L("pick.empty")}</div>`;
+  list.innerHTML = h; list.scrollTop = 0;
+  list.querySelectorAll(".entry").forEach(el => {
+    const go = () => { if(el.dataset.dir) browse(el.dataset.dir); else { closePicker(); pickCb(el.dataset.file); } };
+    el.onclick = go; el.onkeydown = e => { if(e.key==="Enter") go(); };
+  });
+}
+
+/* ================= редактор: основной файл / editor: main file ================= */
+$("#pickMain").onclick = () => openPicker(L("pick.main"), async p => {
+  $("#mainPath").innerHTML = `<bdi><b>${esc(p)}</b></bdi>`;
+  $("#mainBody").innerHTML = `<p class="hint" style="margin-top:12px"><span class="spin"></span> ${L("ed.reading")}</p>`;
+  try{
+    const info = await api("/api/info?path="+encodeURIComponent(p));
+    info.tracks.forEach(t => t.keep = true);
+    S.main = info; S.donors = []; S.dflt = "keep";
+  }catch(e){ S.main = null; toast(e.message); }
+  renderEditor();
+});
+
+function trackTable(rows, head){ return `<div class="scroll"><table class="tracks"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>`; }
+const kindTag = t => `<span class="kind ${t.type}">${esc(L("k."+t.type)||t.type)}</span>`;
+const chTxt = t => t.channels ? L("ch",{n:t.channels}) : "";
+function renderMain(){
+  const m = S.main, box = $("#mainBody");
+  $("#addDonor").disabled = !m;
+  $("#mainPath").innerHTML = m ? `<bdi><b>${esc(m.path)}</b></bdi>` : `<bdi>${L("ed.none")}</bdi>`;
+  if(!m){ box.innerHTML = ""; return; }
+  const v = m.tracks.find(t=>t.type==="video");
+  box.innerHTML = `<div class="facts"><span>${L("f.duration")}<b>${fmtDur(m.duration)}</b></span><span>${L("f.size")}<b>${fmtSize(m.size)}</b></span>${v&&v.dims?`<span>${L("f.picture")}<b>${esc(v.dims)}</b></span>`:""}</div>`
+  + trackTable(m.tracks.map(t => `<tr class="${t.keep?"":"off"}">
+      <td class="c"><input type="checkbox" aria-label="${L("th.keep")} ${t.id}" data-keep="${t.id}" ${t.keep?"checked":""} ${t.type==="video"?"disabled":""}></td>
+      <td class="c">${t.type==="audio"?`<input type="radio" name="dflt" aria-label="${L("th.def")}" value="main:${t.id}" ${t.keep?"":"disabled"}>`:""}</td>
+      <td>${kindTag(t)}</td><td>${esc(t.codec)}</td>
+      <td>${chTxt(t)}${t.type==="video"?esc(t.dims):""}</td>
+      <td>${esc(langName(t.lang))}</td><td>${esc(t.name)}${t.default?` <span class="sub">${L("isdefault")}</span>`:""}</td></tr>`).join(""),
+    `<th class="c">${L("th.keep")}</th><th class="c">${L("th.def")}</th><th>${L("th.type")}</th><th>${L("th.codec")}</th><th>${L("th.ch")}</th><th>${L("th.lang")}</th><th>${L("th.name")}</th>`);
+  box.querySelectorAll("[data-keep]").forEach(cb => cb.onchange = () => { m.tracks.find(t => t.id == cb.dataset.keep).keep = cb.checked; renderMain(); renderSummary(); });
+  bindDefault();
+}
+
+/* ================= редактор: доноры / editor: donors ================= */
+$("#addDonor").onclick = () => openPicker(L("pick.donor"), async p => {
+  if(S.main && p === S.main.path) return toast(L("ed.ismain"));
+  try{
+    const info = await api("/api/info?path="+encodeURIComponent(p));
+    const have = new Set(S.main.tracks.filter(t=>t.keep).map(key));
+    S.donors.forEach(d => Object.keys(d.take).forEach(id => { const t=d.info.tracks.find(x=>x.id==id); if(t) have.add(key(t)); }));
+    const take = {};
+    info.tracks.filter(t => t.type==="audio" && !have.has(key(t))).forEach(t => take[t.id] = {name:t.name, lang:t.lang, rel:0});
+    const d = {info, take, result:null, delay:0, speed:"same", custom:1, busy:false};
+    const da = info.tracks.filter(t=>t.type==="audio"), ma = S.main.tracks.filter(t=>t.type==="audio");
+    if(da.length && ma.length){ [d.srcRef, d.dstRef] = suggestRef(da, ma); }
+    S.donors.push(d); renderDonors(); renderSummary();
+    if(da.length && ma.length) analyze(d);
+  }catch(e){ toast(e.message); }
+}, S.main ? S.main.path.replace(/[\\/][^\\/]*$/,"") : undefined);
+
+function suggestRef(da, ma){
+  // same voice-over → original (eng) → any common language; mirrors the server
+  const norm = s => (s||"").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+  for(const d of da) for(const m of ma) if(d.lang===m.lang && norm(d.name) && norm(d.name)===norm(m.name)) return [d.id, m.id];
+  const ml = new Set(ma.map(t=>t.lang));
+  for(const l of ["eng","rus", ...da.map(t=>t.lang)]) if(ml.has(l) && da.some(t=>t.lang===l)) return [da.find(t=>t.lang===l).id, ma.find(t=>t.lang===l).id];
+  return [da[0].id, ma[0].id];
+}
+function relOf(d, id){ const r = d.result && d.result.rel && d.result.rel[id]; return r ? r.rel : 0; }
+function relNotes(d){
+  return Object.entries(d.take).filter(([id, v]) => v.rel).map(([id, v]) => {
+    const t = d.info.tracks.find(x => x.id == id);
+    return `<p style="color:var(--amber)">${esc(L(v.rel<0?"rel.late":"rel.early", {name:t.name || trackLine(t), ms:Math.abs(v.rel)}))}</p>`;
+  }).join("");
+}
+function verdict(d){
+  if(d.busy) return `<div class="verdict"><span class="lamp busy"></span><div><b>${L("sync.listening")}</b><p>${L("sync.listening.p")}</p></div></div>`;
+  const r = d.result; if(!r) return "";
+  const cls = r.status==="outlier" ? "warn" : r.ok ? "ok" : (r.delay==null ? "err" : "warn");
+  return `<div class="verdict"><span class="lamp ${cls}"></span><div class="grow">
+      ${r.delay!=null?`<div class="offset">${fmtSec(r.delay)}<small>${esc(r.label)}</small></div>`:`<b>${esc(r.label)}</b>`}
+      <p>${esc(r.message)}</p>${relNotes(d)}</div></div>${ruler(d,false)}`;
+}
+function renderDonors(){
+  const box = $("#donors");
+  if(!S.donors.length){ box.innerHTML = `<p class="sub" style="margin:4px 0 0">${L(S.main ? "ed.nodonors" : "ed.pickmainfirst")}</p>`; return; }
+  const ma = S.main.tracks.filter(t=>t.type==="audio");
+  box.innerHTML = S.donors.map((d, i) => {
+    const info = d.info, da = info.tracks.filter(t=>t.type==="audio");
+    const rows = info.tracks.filter(t => t.type!=="video").map(t => {
+      const on = !!d.take[t.id], tk = d.take[t.id] || {name:t.name, lang:t.lang, rel:relOf(d, t.id)}, ok = ["audio","subtitles"].includes(t.type);
+      return `<tr class="${on?"":"off"}">
+        <td class="c"><input type="checkbox" aria-label="${L("th.take")} ${t.id}" data-take="${i}:${t.id}" ${on?"checked":""} ${ok?"":"disabled"}></td>
+        <td class="c">${t.type==="audio"?`<input type="radio" name="dflt" aria-label="${L("th.def")}" value="${i}:${t.id}" ${on?"":"disabled"}>`:""}</td>
+        <td>${kindTag(t)}</td><td>${esc(t.codec)}</td><td>${chTxt(t)}</td>
+        <td><input type="text" size="4" aria-label="${L("th.lang")}" data-lang="${i}:${t.id}" value="${esc(tk.lang)}" ${on?"":"disabled"}></td>
+        <td><input type="text" size="24" aria-label="${L("th.name")}" data-name="${i}:${t.id}" value="${esc(tk.name)}" placeholder="${esc(L("noname"))}" ${on?"":"disabled"}></td>
+        <td>${t.type==="audio"?`<input type="number" step="1" aria-label="${L("th.rel")}" title="${esc(L("th.rel.t"))}" data-rel="${i}:${t.id}" value="${+(tk.rel||0)}" style="width:84px" ${on?"":"disabled"}>`:""}</td></tr>`;
+    }).join("");
+    let sync;
+    const rawBox = `<label class="toggle" style="margin-bottom:12px"><input type="checkbox" data-raw="${i}" ${d.raw?"checked":""}><span>${L("raw")}<small>${L("raw.hint")}</small></span></label>`;
+    if(d.raw) sync = "";
+    else if(!da.length || !ma.length) sync = `<div class="verdict"><span class="lamp warn"></span><div><b>${L("sync.none")}</b><p>${L("sync.none.p")}</p></div></div>`;
+    else sync = `<div class="row" style="align-items:flex-end">
+        <label class="field grow"><span>${L("sync.src")}</span><select data-sref="${i}">${da.map(t=>`<option value="${t.id}" ${t.id==d.srcRef?"selected":""}>${esc(trackLine(t))}</option>`).join("")}</select></label>
+        <label class="field grow"><span>${L("sync.dst")}</span><select data-dref="${i}">${ma.map(t=>`<option value="${t.id}" ${t.id==d.dstRef?"selected":""}>${esc(trackLine(t))}</option>`).join("")}</select></label>
+        <button class="btn" data-an="${i}" ${d.busy?"disabled":""}>${L("sync.redo")}</button></div>${verdict(d)}`;
+    const speeds = CFG.speeds.map(s => `<option value="${s.key}" ${d.speed===s.key?"selected":""}>${esc(s.label)}</option>`).join("") + `<option value="custom" ${d.speed==="custom"?"selected":""}>${L("sync.custom")}</option>`;
+    const big = Math.abs(factorOf(d)-1) > CFG.reencode_above;
+    return `<div class="donor">
+      <div class="donor-top"><div class="grow"><div class="nm">${esc(info.name)}</div><div class="sub">${fmtDur(info.duration)}, ${fmtSize(info.size)}</div></div>
+        <button class="btn quiet sm" data-rm="${i}">${L("act.remove")}</button></div>
+      ${trackTable(rows || `<tr><td colspan="8" class="sub">${L("nostreams")}</td></tr>`, `<th class="c">${L("th.take")}</th><th class="c">${L("th.def")}</th><th>${L("th.type")}</th><th>${L("th.codec")}</th><th>${L("th.ch")}</th><th>${L("th.lang")}</th><th>${L("th.name")}</th><th title="${esc(L("th.rel.t"))}">${L("th.rel")}</th>`)}
+      <div class="sync">${rawBox}${sync}
+        <div class="row" style="margin-top:12px;align-items:flex-end">
+          <label class="field"><span>${L("sync.delay")}</span><input type="number" step="1" data-delay="${i}" value="${d.delay}" style="width:130px"></label>
+          <label class="field grow ${d.raw?"hidden":""}"><span>${L("sync.speed")}</span><select data-speed="${i}">${speeds}</select></label>
+          <label class="field ${d.speed==="custom"?"":"hidden"}"><span>${L("sync.factor")}</span><input type="number" step="0.000001" data-custom="${i}" value="${d.custom}" style="width:140px"></label>
+        </div>
+        ${big?`<p class="sub" style="margin:10px 0 0;color:var(--amber)">${L("sync.big")}</p>`:""}
+      </div></div>`;
+  }).join("");
+  const at = s => s.split(":").map(Number);
+  box.querySelectorAll("[data-take]").forEach(cb => cb.onchange = () => { const [i,id]=at(cb.dataset.take), d=S.donors[i], t=d.info.tracks.find(x=>x.id===id);
+    if(cb.checked) d.take[id] = {name:t.name, lang:t.lang, rel:relOf(d, id)}; else delete d.take[id]; renderDonors(); renderSummary(); });
+  box.querySelectorAll("[data-raw]").forEach(cb => cb.onchange = () => { const d = S.donors[+cb.dataset.raw]; d.raw = cb.checked;
+    if(d.raw){ d.delay = 0; d.speed = "same"; Object.values(d.take).forEach(v => v.rel = 0); }
+    else if(d.result && d.result.delay != null){ d.delay = d.result.delay; d.speed = d.result.speed==="custom" ? "custom" : d.result.speed; Object.keys(d.take).forEach(id => d.take[id].rel = relOf(d, id)); }
+    renderDonors(); renderSummary(); });
+  box.querySelectorAll("[data-rel]").forEach(el => el.onchange = () => { const [i,id]=at(el.dataset.rel); S.donors[i].take[id].rel = parseInt(el.value||"0",10)||0; renderDonors(); });
+  box.querySelectorAll("[data-name]").forEach(el => el.oninput = () => { const [i,id]=at(el.dataset.name); S.donors[i].take[id].name = el.value; });
+  box.querySelectorAll("[data-lang]").forEach(el => el.oninput = () => { const [i,id]=at(el.dataset.lang); S.donors[i].take[id].lang = el.value.trim(); });
+  box.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { S.donors.splice(+b.dataset.rm,1); if(/^\d/.test(S.dflt)) S.dflt="keep"; renderDonors(); renderSummary(); });
+  box.querySelectorAll("[data-sref]").forEach(s => s.onchange = () => S.donors[+s.dataset.sref].srcRef = +s.value);
+  box.querySelectorAll("[data-dref]").forEach(s => s.onchange = () => S.donors[+s.dataset.dref].dstRef = +s.value);
+  box.querySelectorAll("[data-an]").forEach(b => b.onclick = () => analyze(S.donors[+b.dataset.an]));
+  box.querySelectorAll("[data-delay]").forEach(el => el.onchange = () => { S.donors[+el.dataset.delay].delay = parseInt(el.value||"0",10)||0; renderDonors(); renderSummary(); });
+  box.querySelectorAll("[data-speed]").forEach(el => el.onchange = () => { S.donors[+el.dataset.speed].speed = el.value; renderDonors(); });
+  box.querySelectorAll("[data-custom]").forEach(el => el.onchange = () => { S.donors[+el.dataset.custom].custom = parseFloat(el.value)||1; renderDonors(); });
+  bindDefault();
+}
+async function analyze(d){
+  if(d.busy) return;
+  d.busy = true; renderDonors(); renderSummary();
+  try{
+    const r = await api("/api/analyze", {method:"POST", body:{main:S.main.path, donor:d.info.path, src_ref:d.srcRef, dst_ref:d.dstRef}});
+    d.result = r;
+    if(!d.raw){        // "mux as is" keeps the user's values
+      if(r.delay != null) d.delay = r.delay;
+      Object.keys(d.take).forEach(id => d.take[id].rel = relOf(d, id));
+      if(r.speed === "custom"){ d.speed = "custom"; d.custom = +r.factor.toFixed(9); } else d.speed = r.speed;
+    }
+  }catch(e){ d.result = {ok:false, delay:null, label:L("sync.fail"), message:e.message, points:[]}; }
+  d.busy = false;
+  if(S.donors.includes(d)){ renderDonors(); renderSummary(); }
+}
+function bindDefault(){
+  const radios = [...$$('input[name="dflt"]')];
+  const cur = radios.find(r => r.value === S.dflt);
+  if(cur && cur.disabled) S.dflt = "keep";          // the track was unticked — back to "keep"
+  radios.forEach(r => { r.checked = r.value === S.dflt; r.onchange = () => { S.dflt = r.value; renderSummary(); }; });
+}
+function renderSummary(){
+  const box = $("#summary"), btn = $("#submit");
+  if(!S.main){ box.classList.add("hidden"); btn.disabled = true; return; }
+  const add = S.donors.reduce((n,d) => n + Object.keys(d.take).length, 0);
+  const removed = S.main.tracks.filter(t => !t.keep).length;
+  const busy = S.donors.some(d => d.busy && !d.raw);
+  const shaky = S.donors.filter(d => !d.raw && Object.keys(d.take).length && d.result && !d.result.ok).length;
+  const parts = [];
+  if(add) parts.push(L("sum.add", {n:add, w:plural(add, "w.track")}));
+  if(removed) parts.push(L("sum.remove", {n:removed}));
+  if(S.dflt !== "keep") parts.push(L("sum.default"));
+  const cls = busy ? "busy" : shaky ? "warn" : parts.length ? "ok" : "";
+  box.innerHTML = `<span class="lamp ${cls}"></span><div><b>${parts.length ? cap(parts.join(", ")) : L("sum.none")}</b>
+    <p>${busy ? L("sum.busy") : shaky ? L("sum.shaky") : parts.length ? L("sum.go") : L("sum.tick")}</p></div>`;
+  box.classList.remove("hidden");
+  btn.disabled = busy || !parts.length;
+}
+function packState(){
+  S.outMode = $("#outMode").value; S.outName = $("#outName").value;
+  return JSON.parse(JSON.stringify({...S, donors:S.donors.map(d => ({...d, busy:false}))}));
+}
+function renderEditor(){
+  const draft = ctx.kind === "draft";
+  $("#edTitle").textContent = draft ? ctx.name : L("ed.new");
+  $("#edSub").textContent = L(draft ? "ed.draft.sub" : "ed.new.sub");
+  $("#edTools").innerHTML = draft ? `<button class="btn quiet" id="backDrafts">${L("ed.back")}</button>` : "";
+  if(draft) $("#backDrafts").onclick = () => show("drafts");
+  $("#saveDraft").classList.toggle("hidden", !draft);
+  $("#reset").textContent = L(draft ? "ed.closedraft" : "ed.clear");
+  $("#outMode").value = S.outMode || "beside"; $("#outName").value = S.outName || "";
+  renderMain(); renderDonors(); renderSummary();
+}
+$("#submit").onclick = async () => {
+  const unchecked = S.donors.filter(d => !d.raw && Object.keys(d.take).length && !d.result && d.info.tracks.some(t=>t.type==="audio") && S.main.tracks.some(t=>t.type==="audio"));
+  if(unchecked.length && !confirm(L("q.unchecked"))) return;
+  $("#submit").disabled = true;
+  try{
+    if(ctx.kind === "draft"){ await api(`/api/drafts/${ctx.id}/queue`, {method:"POST", body:{state:packState()}}); toast(L("t.draftqueued")); closeEditor(); show("drafts"); }
+    else { await api("/api/jobs", {method:"POST", body:{state:packState()}}); toast(L("t.queuednext")); closeEditor(); }
+    refreshBadges();
+  }catch(e){ toast(e.message); renderSummary(); }
+};
+$("#saveDraft").onclick = async () => { try{ await api(`/api/drafts/${ctx.id}`, {method:"PUT", body:{state:packState()}}); toast(L("t.saved")); }catch(e){ toast(e.message); } };
+function closeEditor(){ const wasDraft = ctx.kind==="draft"; ctx = {kind:"manual"}; S = blankState(); renderEditor(); if(wasDraft) show("drafts"); }
+$("#reset").onclick = closeEditor;
+
+/* ================= черновики / drafts ================= */
+const DSTATE = {analyzing:"busy", ready:"ok", attention:"warn", error:"err", queued:"busy", building:"busy", done:"ok", failed:"err", cancelled:"warn"};
+const selected = new Set();
+let draftsTimer = null, lastDrafts = [], lastDraftData = null;
+async function loadDrafts(){
+  let data; try{ data = await api("/api/drafts"); }catch(e){ return; }
+  lastDrafts = data.drafts; lastDraftData = data;
+  const attention = data.drafts.filter(d => ["ready","attention","error"].includes(d.status)).length;
+  $("#bDrafts").textContent = attention; $("#bDrafts").classList.toggle("hidden", !attention);
+  if(VIEW === "drafts") renderDrafts(data);
+  clearTimeout(draftsTimer);
+  const busy = data.drafts.some(d => ["analyzing","queued","building"].includes(d.status)) || data.folders.some(f=>!f.problem);
+  draftsTimer = setTimeout(loadDrafts, VIEW==="drafts" ? (busy?2500:8000) : 15000);
+}
+function checkBlock(c){
+  const lamp = c.ok===true ? "ok" : c.ok===false ? "warn" : "";
+  const v = c.video ? `<div class="check-item"><span class="lamp ${c.video.ok===true?"ok":c.video.ok===false?"warn":""}" style="width:7px;height:7px"></span><span>${esc(c.video.text)}</span></div>` : "";
+  return `<div class="check"><div class="row" style="gap:8px"><span class="lamp ${lamp}"></span><b>${esc(c.message)}</b></div>${v}
+    ${(c.items||[]).map(it => `<div class="check-item"><span class="lamp ${it.status==="ok"?"ok":it.status==="warn"?"warn":""}" style="width:7px;height:7px"></span><span><b>${esc(it.name)}</b> ${esc(it.text)}</span></div>`).join("")}</div>`;
+}
+function renderDrafts(data){
+  const list = $("#draftList");
+  [...selected].forEach(id => { const d = data.drafts.find(x=>x.id===id); if(!d || !["ready","attention","failed","cancelled"].includes(d.status)) selected.delete(id); });
+  if(!data.drafts.length){
+    list.innerHTML = `<div class="empty"><b>${L("drafts.empty.t")}</b>${L("drafts.empty",{dir:`<span style="color:var(--text)">${esc(data.watch_dir)}</span>`})}${data.enabled?"":`<br><span style="color:var(--amber)">${L("drafts.off")}</span>`}</div>`;
+  } else list.innerHTML = data.drafts.map(d => {
+    let cls = DSTATE[d.status] || "", label = L("ds."+d.status);
+    if(d.status==="done" && d.check && d.check.ok===false){ cls = "warn"; label = L("ds.donewarn"); }
+    const st = d.state, donors = st ? st.donors : [];
+    const chips = donors.map(x => {
+      const n = Object.keys(x.take||{}).length;
+      const lamp = x.raw ? "ok" : x.result ? (x.result.ok ? "ok" : x.result.delay==null ? "err" : "warn") : (n ? "warn" : "");
+      return `<span class="chip"><span class="lamp ${lamp}" style="width:7px;height:7px"></span>${n?`<b>${n}</b> ${plural(n,"w.track")}`:L("drafts.nothing")}${x.result&&x.result.delay!=null?`, ${fmtSec(x.delay)}`:""}</span>`;
+    }).join("");
+    const mainName = st ? st.main.name : (d.main_path||"").split(/[\\/]/).pop();
+    const canSel = ["ready","attention","failed","cancelled"].includes(d.status);
+    const firstDonor = donors.find(x => x.result && x.result.points && x.result.points.length);
+    const prog = d.job && ["queued","building"].includes(d.status) ? `<div class="bar"><i style="width:${d.job.progress||0}%"></i></div>` : "";
+    const chk = d.status==="done" && d.check ? `<div class="sub" style="color:${d.check.ok===false?"var(--amber)":d.check.ok?"var(--lock)":"var(--muted)"}">${esc(d.check.message)}</div>` : "";
+    const sub = d.status==="done" && d.output ? `<div class="sub" style="color:var(--lock);word-break:break-all">${esc(d.output)}</div>${chk}` :
+                d.error ? `<div class="sub" style="color:var(--alert)">${esc(d.error)}</div>` : d.note ? `<div class="sub" style="color:var(--amber)">${esc(d.note)}</div>` : "";
+    return `<div class="draft">
+      <input type="checkbox" aria-label="${L("drafts.mark")}" data-sel="${d.id}" ${selected.has(d.id)?"checked":""} ${canSel?"":"disabled"}>
+      <span class="lamp ${cls}"></span>
+      <div style="min-width:0"><div class="title" data-open="${d.id}"><span class="lamp lamp-in ${cls}"></span>${esc(d.name)}</div>
+        <div class="what"><span>${esc(mainName)}</span>${chips}</div>${sub}</div>
+      ${firstDonor ? ruler(firstDonor, true) : `<div class="mini"></div>`}
+      <div class="row acts" style="gap:6px;justify-content:flex-end">
+        <div class="state ${cls}">${label}${d.job&&d.status==="building"?" "+Math.round(d.job.progress||0)+"%":""}${prog}</div>
+        ${d.state && !["queued","building"].includes(d.status) ? `<button class="btn sm" data-open="${d.id}">${L("drafts.open")}</button>` : ""}
+        ${canSel && d.state ? `<button class="btn sm go" data-q="${d.id}">${L("act.queue")}</button>` : ""}
+        ${!["queued","building","analyzing"].includes(d.status) ? `<button class="btn sm quiet" data-re="${d.id}" title="${esc(L("drafts.redo.t"))}">${L("drafts.redo")}</button><button class="btn sm quiet" data-del="${d.id}">${L("drafts.del")}</button>` : ""}
+      </div></div>`;
+  }).join("");
+  list.querySelectorAll("[data-sel]").forEach(cb => cb.onchange = () => { cb.checked ? selected.add(cb.dataset.sel) : selected.delete(cb.dataset.sel); syncSel(); });
+  list.querySelectorAll("[data-open]").forEach(el => el.onclick = () => openDraft(el.dataset.open));
+  list.querySelectorAll("[data-q]").forEach(b => b.onclick = async () => { try{ await api(`/api/drafts/${b.dataset.q}/queue`, {method:"POST"}); toast(L("t.queued")); loadDrafts(); refreshBadges(); }catch(e){ toast(e.message); } });
+  list.querySelectorAll("[data-re]").forEach(b => b.onclick = async () => { try{ await api(`/api/drafts/${b.dataset.re}/reanalyze`, {method:"POST"}); loadDrafts(); }catch(e){ toast(e.message); } });
+  list.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+    if(!confirm(L("drafts.del.q"))) return;
+    try{ await api(`/api/drafts/${b.dataset.del}`, {method:"DELETE"}); loadDrafts(); }catch(e){ toast(e.message); } });
+  $("#folderBox").classList.toggle("hidden", !data.folders.length);
+  $("#folderList").innerHTML = data.folders.map(f => `<div class="fl"><span class="lamp ${f.problem?"err":"busy"}"></span><b class="grow">${esc(f.name)}</b><span class="sub" style="font-size:13px">${esc(f.state)}</span>${f.can_reset?`<button class="btn sm" data-reset="${esc(f.name)}">${L("drafts.reset")}</button>`:""}</div>`).join("");
+  $$("#folderList [data-reset]").forEach(b => b.onclick = async () => { await api("/api/watch/reset", {method:"POST", body:{name:b.dataset.reset}}); toast(L("drafts.reset.t")); setTimeout(loadDrafts, 1500); });
+  syncSel();
+}
+function syncSel(){
+  const ready = lastDrafts.filter(d => d.status==="ready");
+  $("#selAll").checked = ready.length>0 && ready.every(d => selected.has(d.id));
+  $("#selAll").disabled = !ready.length;
+  $("#queueSel").disabled = !selected.size;
+  $("#queueSel").textContent = selected.size ? L("act.queueN",{n:selected.size}) : L("act.queue");
+}
+$("#selAll").onchange = () => { const ready = lastDrafts.filter(d => d.status==="ready"); ready.forEach(d => $("#selAll").checked ? selected.add(d.id) : selected.delete(d.id)); $$("[data-sel]").forEach(cb => cb.checked = selected.has(cb.dataset.sel)); syncSel(); };
+$("#queueSel").onclick = async () => {
+  try{ const r = await api("/api/drafts/queue", {method:"POST", body:{ids:[...selected]}}); selected.clear();
+    toast(L("t.queuedN",{n:r.queued}) + (r.errors.length ? L("t.failedN",{list:r.errors.join("; ")}) : "")); loadDrafts(); refreshBadges(); }
+  catch(e){ toast(e.message); }
+};
+const parentDir = p => p.replace(/[\\/][^\\/]*[\\/]?$/, "") || p;
+$("#batchBtn").onclick = () => openPicker(L("batch.main"), mainDir =>
+  openPicker(L("batch.donor"), async donorDir => {
+    try{ const r = await api("/api/batch", {method:"POST", body:{main_dir:mainDir, donor_dirs:[donorDir], out_mode:"beside"}});
+      toast(L("batch.done",{n:r.created}) + (r.unpaired.length ? L("batch.unpaired",{list:r.unpaired.join(", ")}) : "")); loadDrafts(); }
+    catch(e){ toast(e.message); }
+  }, parentDir(mainDir), {folder:true}), undefined, {folder:true});
+$("#scanNow").onclick = async () => { await api("/api/watch/scan", {method:"POST"}); toast(L("t.scanning")); setTimeout(loadDrafts, 1500); };
+function openDraft(id){
+  const d = lastDrafts.find(x => x.id === id);
+  if(!d || !d.state) return;
+  ctx = {kind:"draft", id:d.id, name:d.name};
+  S = JSON.parse(JSON.stringify(d.state)); S.donors.forEach(x => x.busy = false);
+  show("edit"); renderEditor();
+}
+
+/* ================= очередь и прогресс слева / queue and rail progress ================= */
+const JSTATE = {queued:"", running:"busy", done:"ok", failed:"err", cancelled:"warn"};
+const openLogs = new Set();
+let jobsTimer = null;
+function renderMeter(list){
+  const running = list.filter(j => j.status==="running"), queued = list.filter(j => j.status==="queued");
+  const m = $("#meter");
+  if(!running.length){
+    $("#meterTitle").textContent = ""; $("#meterFill").style.width = "0";
+    $("#meterText").textContent = queued.length ? L("meter.waiting",{n:queued.length}) : L("meter.idle");
+    $("#meterPct").textContent = ""; m.title = ""; return;
+  }
+  const avg = running.reduce((s,j) => s + (j.progress||0), 0) / running.length;
+  const j = running[0];
+  $("#meterTitle").textContent = running.length === 1 ? j.title : L("meter.parallel",{n:running.length});
+  $("#meterFill").style.width = Math.max(2, avg).toFixed(1) + "%";
+  $("#meterText").textContent = queued.length ? L("meter.more",{n:queued.length}) : (running.length===1 ? j.phase : "");
+  $("#meterPct").textContent = Math.round(avg) + "%";
+  m.title = running.map(x => `${x.title}: ${Math.round(x.progress||0)}%`).join("\n");
+}
+async function loadJobs(){
+  let list; try{ list = await api("/api/jobs"); }catch(e){ return; }
+  const live = list.filter(j => ["queued","running"].includes(j.status)), done = list.filter(j => !["queued","running"].includes(j.status));
+  $("#bQueue").textContent = live.length; $("#bQueue").classList.toggle("hidden", !live.length);
+  renderMeter(list);
+  if(VIEW === "queue"){
+    const card = j => {
+      let cls = JSTATE[j.status] ?? "", label = L("js."+j.status); const s = j.summary || {};
+      if(j.status==="done" && j.check && j.check.ok===false){ cls = "warn"; label = L("js.donewarn"); }
+      return `<div class="job ${j.status==="running"?"live":""}"><div class="job-top"><span class="lamp ${cls}"></span><div class="title">${esc(j.title)}</div>
+        <span class="sub">${L(j.kind==="draft"?"q.fromdraft":"q.manual")}${s.add?`, +${s.add}`:""}${s.removed?`, −${s.removed}`:""}</span>
+        <span class="state ${cls}">${label}</span>
+        ${["queued","running"].includes(j.status)?`<button class="btn sm" data-cancel="${j.id}">${L("act.cancel")}</button>`:`<button class="btn sm quiet" data-del="${j.id}">${L("act.remove")}</button>`}
+        <button class="btn sm quiet" data-log="${j.id}">${L(openLogs.has(j.id)?"q.hidelog":"q.log")}</button></div>
+        ${j.status==="running"?`<div class="progress"><i style="width:${j.progress||0}%"></i></div><div class="phase">${esc(j.phase)}, ${Math.round(j.progress||0)}%</div>`:""}
+        ${j.output&&j.status==="done"?`<div class="out">${esc(j.output)}</div>`:""}
+        ${j.check?checkBlock(j.check):""}
+        ${j.error?`<div class="err">${esc(j.error)}</div>`:""}
+        ${openLogs.has(j.id)?`<pre>${esc((j.log||[]).join("\n")) || L("q.nolog")}</pre>`:""}</div>`;
+    };
+    $("#jobsLive").innerHTML = live.length ? live.map(card).join("") : `<div class="panel empty"><b>${L("q.empty.t")}</b>${L("q.empty")}</div>`;
+    $("#jobsDone").innerHTML = done.length ? `<div class="section-label">${L("q.finished")}</div>` + done.map(card).join("") : "";
+    $$("#v-queue [data-cancel]").forEach(b => b.onclick = async () => { await api(`/api/jobs/${b.dataset.cancel}/cancel`, {method:"POST"}); loadJobs(); });
+    $$("#v-queue [data-del]").forEach(b => b.onclick = async () => { await api(`/api/jobs/${b.dataset.del}`, {method:"DELETE"}); loadJobs(); });
+    $$("#v-queue [data-log]").forEach(b => b.onclick = () => { const id=b.dataset.log; openLogs.has(id)?openLogs.delete(id):openLogs.add(id); loadJobs(); });
+    $$("#v-queue pre").forEach(p => p.scrollTop = p.scrollHeight);
+  }
+  clearTimeout(jobsTimer);
+  jobsTimer = setTimeout(loadJobs, live.length ? 1500 : 8000);
+}
+function refreshBadges(){ loadJobs(); loadDrafts(); }
+$("#clearDone").onclick = async () => { await api("/api/jobs/clear", {method:"POST"}); loadJobs(); };
+
+/* ================= правила / rules ================= */
+async function loadSettings(){
+  const s = await api("/api/settings");
+  $("#sEnabled").checked = s.enabled; $("#sSubs").checked = s.take_subs; $("#sMode").value = s.mode;
+  $("#sLangs").value = (s.langs||[]).join(", "); $("#sRemove").value = (s.remove_langs||[]).join(", "); $("#sDefault").value = s.default_lang||"";
+  $("#sOrder").value = (s.order_langs||[]).join(", ");
+  $("#sAuto").checked = s.auto_build; $("#sParallel").value = String(s.parallel||1); $("#sAfter").value = s.after;
+  const w = CFG.watch_dir, o = CFG.output_dir, ex = L("s.tree.example");
+  $("#tree").innerHTML = `<div>${ICON_DIR}<b>${esc(w)}</b><em>${L("s.tree.watch")}</em></div>
+    <div class="i1">${ICON_DIR}<b>${esc(ex)}</b><em>${L("s.tree.film")}</em></div>
+    <div class="i2">${ICON_DIR}<b>main</b><em>${L("s.tree.main")}</em></div>
+    <div class="i2 f" style="padding-left:62px">Sintel.2010.2160p.mkv</div>
+    <div class="i2">${ICON_DIR}<b>donors</b><em>${L("s.tree.donors")}</em></div>
+    <div class="i2 f" style="padding-left:62px">Sintel.2010.1080p.mkv</div>
+    <div class="i2 f" style="padding-left:62px">Sintel.2010.rus.srt</div>
+    <div style="margin-top:8px">${ICON_DIR}<b>${esc(o)}/${esc(ex)}</b><em>${L("s.tree.out")}</em></div>`;
+}
+$("#saveSettings").onclick = async () => {
+  try{ await api("/api/settings", {method:"POST", body:{enabled:$("#sEnabled").checked, take_subs:$("#sSubs").checked, mode:$("#sMode").value,
+      langs:$("#sLangs").value, remove_langs:$("#sRemove").value, default_lang:$("#sDefault").value, order_langs:$("#sOrder").value,
+      auto_build:$("#sAuto").checked, parallel:+$("#sParallel").value, after:$("#sAfter").value}});
+    toast(L("t.rules")); loadSettings(); }catch(e){ toast(e.message); }
+};
+
+/* ================= старт / start ================= */
+(async () => {
+  LANG = ls.get("lang", "ru");
+  try{ CFG = await api("/api/config"); }
+  catch(e){ applyI18n(); document.querySelector(".view").innerHTML = `<div class="panel empty"><b>${L("server.down")}</b>${esc(e.message)}</div>`; return; }
+  if(CFG.lang && !ls.get("lang", null)) LANG = CFG.lang;      // язык из настроек контейнера, пока пользователь не выбрал сам
+  if(CFG.lang !== LANG){ try{ await api("/api/settings", {method:"POST", body:{lang:LANG}}); CFG = await api("/api/config"); }catch(e){} }
+  applyI18n(); renderEditor(); loadJobs(); loadDrafts();
+  show(ls.get("view","drafts"));
+})();
+</script>
+</body>
+</html>
