@@ -109,6 +109,8 @@ MSG = {
                    "offset is unstable ({n} of {of} points agree)"),
     "c.unknown": ("не удалось проверить — звук слишком отличается от оригинала",
                   "could not check — audio differs too much from the original"),
+    "c.difflang": ("— в остальных точках в основном речь, а дубляж с оригиналом совпадает только по музыке и шумам. Это нормально.",
+                   "— the other points are mostly speech, and a dub matches the original only on music and effects. This is normal."),
     "c.flag": ("; флаг «по умолчанию» не выставился", "; the default flag was not set"),
     "c.log": ("Проверка: «{name}» — {text}", "Check: “{name}” — {text}"),
     "c.log2": ("Проверка: {msg}", "Check: {msg}"),

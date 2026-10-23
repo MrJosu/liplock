@@ -48,6 +48,7 @@ SCAN_POINTS_MORE = [0.15, 0.3]   # if the start differs too much (recap, long in
 MAX_SCAN_WINDOW = 600            # ± s at most, when the files differ a lot in length
 POINTS = [0.2, 0.35, 0.5, 0.65, 0.8, 0.93]
 CHECK_POINTS = [0.12, 0.3, 0.5, 0.7, 0.9]
+CHECK_EXTRA = [0.2, 0.4, 0.6, 0.8, 0.95]        # post-check: used when too few main points match
 TOLERANCE_MS = 40
 MIN_CONFIDENCE = 6.0
 REENCODE_ABOVE = 0.002           # speed difference above which audio is re-encoded
@@ -786,20 +787,29 @@ def _post_audio(output, plan, audio_order, info, out_audio, res, log, cancel):
     for k, meta in new:
         _check(cancel)
         t_out = out_audio[k]
-        vals = []
-        for frac in CHECK_POINTS:
+        vals, tried = [], 0
+        # a dub against the original matches only on music and effects, so some points miss;
+        # then extra points are measured in between until there are enough to judge
+        for frac in CHECK_POINTS + CHECK_EXTRA:
+            if tried >= len(CHECK_POINTS) and len(vals) >= 4:
+                break
+            _check(cancel)
+            tried += 1
             a, a0, b, b0 = _grab(output, t_out["id"], output, ref_out, dur * frac, 0, 3)
             r = _correlate(a, a0, b, b0, 1.0)
             if r and r[1] >= MIN_CONFIDENCE:
                 vals.append(r[0])
-        item = {"name": meta["name"], "points": len(vals), "of": len(CHECK_POINTS)}
+        diff_lang = (meta.get("lang") or "und") != (ref[1].get("lang") or "und")
+        item = {"name": meta["name"], "points": len(vals), "of": tried}
         if len(vals) >= 3:
             med = float(np.median(vals))
             inl = [v for v in vals if abs(v - med) <= TOLERANCE_MS]
             item["offset"] = int(round(med))
             if len(inl) >= 3 and abs(med) <= TOLERANCE_MS:
                 item["status"] = "ok"
-                say(item, "text", M("c.ok", ref=ref_label, n=len(inl), of=len(CHECK_POINTS), ms=med))
+                say(item, "text", M("c.ok", ref=ref_label, n=len(inl), of=tried, ms=med))
+                if diff_lang and len(inl) < tried:
+                    say(item, "text", join([item["text_t"], M("c.difflang")], " "))
             else:
                 bad += 1
                 # med = time in the original − time in the new track: negative means the new one is late

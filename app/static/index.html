@@ -154,6 +154,10 @@ input:disabled,select:disabled{opacity:.4}
 .sync{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
 .verdict{display:flex;gap:10px;align-items:flex-start;margin:12px 0 4px;font-size:13.5px}
 .verdict .lamp{margin-top:6px}
+.verdict.waiting{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-m);background:var(--busy-dim)}
+.indet{height:4px;border-radius:2px;background:var(--line-soft);overflow:hidden;margin-top:10px;position:relative}
+.indet>i{position:absolute;inset:0 auto 0 0;width:35%;border-radius:2px;background:var(--busy);animation:indet 1.4s ease-in-out infinite}
+@keyframes indet{0%{left:-35%}100%{left:100%}}
 .verdict b{font-weight:600}
 .verdict p{margin:2px 0 0;color:var(--muted);font-size:13px}
 .offset{font-size:26px;font-weight:600;letter-spacing:-.5px;line-height:1}
@@ -458,7 +462,11 @@ const STR = {
   "k.video":["Видео","Video"], "k.audio":["Аудио","Audio"], "k.subtitles":["Субтитры","Subtitles"],
   "ch":["{n} кан.","{n} ch"], "isdefault":["сейчас по умолчанию","current default"], "noname":["Без названия","Untitled"],
   "nostreams":["Нет аудио и субтитров","No audio or subtitles"],
-  "sync.listening":["Слушаю оба файла","Listening to both files"], "sync.listening.p":["Обычно 10–60 секунд","Usually 10–60 seconds"],
+  "sync.listening":["Считаю сдвиг: слушаю оба файла…","Measuring the offset: listening to both files…"],
+  "sync.listening.p":["Обычно 10–60 секунд, на медленных дисках дольше. В очередь можно отправить после расчёта.","Usually 10–60 seconds, longer on slow disks. You can queue once it is done."],
+  "sync.elapsed":["· прошло {s} с","· {s} s so far"], "act.waitsync":["Жду расчёт сдвига…","Waiting for the offset…"],
+  "sync.difflang":["Сверяются дорожки на разных языках ({a} и {b}): совпадут только музыка и шумы, точность ниже.","Comparing tracks in different languages ({a} and {b}): only music and effects match, so accuracy is lower."],
+  "sync.difflang.fix":["Сверяются дорожки на разных языках ({a} и {b}). Точнее сверять одинаковые — выбери в доноре дорожку {b}.","Comparing tracks in different languages ({a} and {b}). Same-language tracks are more accurate — pick the {b} track in the donor."],
   "sync.none":["Сверять не по чему","Nothing to compare"],
   "sync.none.p":["В доноре нет звука, проверить по нему нельзя. Укажи сдвиг вручную: 0 — если субтитры сделаны под основной файл, сдвиг донора — если под донор.","The donor has no audio, so it can't be checked. Enter the offset manually: 0 if the subtitles were made for the main file, the donor's offset if they were made for the donor."],
   "sync.src":["Сверять дорожку донора","Compare donor track"], "sync.dst":["с дорожкой основного","with main track"],
@@ -722,12 +730,19 @@ function relNotes(d){
   }).join("");
 }
 function verdict(d){
-  if(d.busy) return `<div class="verdict"><span class="lamp busy"></span><div><b>${L("sync.listening")}</b><p>${L("sync.listening.p")}</p></div></div>`;
+  if(d.busy) return `<div class="verdict waiting"><span class="lamp busy"></span><div class="grow"><b>${L("sync.listening")}</b>
+      <p>${L("sync.listening.p")} <span class="sub" data-elapsed="${d.busySince||Date.now()}"></span></p><div class="indet"><i></i></div></div></div>`;
   const r = d.result; if(!r) return "";
   const cls = r.status==="outlier" ? "warn" : r.ok ? "ok" : (r.delay==null ? "err" : "warn");
   return `<div class="verdict"><span class="lamp ${cls}"></span><div class="grow">
       ${r.delay!=null?`<div class="offset">${fmtSec(r.delay)}<small>${esc(r.label)}</small></div>`:`<b>${esc(r.label)}</b>`}
       <p>${esc(r.message)}</p>${relNotes(d)}</div></div>${ruler(d,false)}`;
+}
+function langWarn(d, da, ma){
+  const a = da.find(t => t.id == d.srcRef), b = ma.find(t => t.id == d.dstRef);
+  if(!a || !b || (a.lang||"und") === (b.lang||"und")) return "";
+  const same = da.find(t => (t.lang||"und") === (b.lang||"und"));
+  return `<p class="sub" style="margin:8px 0 0;color:var(--amber-ink)">${L(same ? "sync.difflang.fix" : "sync.difflang", {a:a.lang||"und", b:b.lang||"und"})}</p>`;
 }
 function renderDonors(){
   const box = $("#donors");
@@ -752,7 +767,7 @@ function renderDonors(){
     else sync = `<div class="row" style="align-items:flex-end">
         <label class="field grow"><span>${L("sync.src")}</span><select data-sref="${i}">${da.map(t=>`<option value="${t.id}" ${t.id==d.srcRef?"selected":""}>${esc(trackLine(t))}</option>`).join("")}</select></label>
         <label class="field grow"><span>${L("sync.dst")}</span><select data-dref="${i}">${ma.map(t=>`<option value="${t.id}" ${t.id==d.dstRef?"selected":""}>${esc(trackLine(t))}</option>`).join("")}</select></label>
-        <button class="btn" data-an="${i}" ${d.busy?"disabled":""}>${L("sync.redo")}</button></div>${verdict(d)}`;
+        <button class="btn" data-an="${i}" ${d.busy?"disabled":""}>${L("sync.redo")}</button></div>${d.busy ? "" : langWarn(d, da, ma)}${verdict(d)}`;
     const speeds = CFG.speeds.map(s => `<option value="${s.key}" ${d.speed===s.key?"selected":""}>${esc(s.label)}</option>`).join("") + `<option value="custom" ${d.speed==="custom"?"selected":""}>${L("sync.custom")}</option>`;
     const big = Math.abs(factorOf(d)-1) > CFG.reencode_above;
     return `<div class="donor">
@@ -779,8 +794,9 @@ function renderDonors(){
   box.querySelectorAll("[data-name]").forEach(el => el.oninput = () => { const [i,id]=at(el.dataset.name); S.donors[i].take[id].name = el.value; });
   box.querySelectorAll("[data-lang]").forEach(el => el.oninput = () => { const [i,id]=at(el.dataset.lang); S.donors[i].take[id].lang = el.value.trim(); });
   box.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { S.donors.splice(+b.dataset.rm,1); if(/^\d/.test(S.dflt)) S.dflt="keep"; renderDonors(); renderSummary(); });
-  box.querySelectorAll("[data-sref]").forEach(s => s.onchange = () => S.donors[+s.dataset.sref].srcRef = +s.value);
-  box.querySelectorAll("[data-dref]").forEach(s => s.onchange = () => S.donors[+s.dataset.dref].dstRef = +s.value);
+  // another reference pair means another measurement: re-run right away so the verdict matches the selection
+  box.querySelectorAll("[data-sref]").forEach(s => s.onchange = () => { const d = S.donors[+s.dataset.sref]; d.srcRef = +s.value; analyze(d); });
+  box.querySelectorAll("[data-dref]").forEach(s => s.onchange = () => { const d = S.donors[+s.dataset.dref]; d.dstRef = +s.value; analyze(d); });
   box.querySelectorAll("[data-an]").forEach(b => b.onclick = () => analyze(S.donors[+b.dataset.an]));
   box.querySelectorAll("[data-delay]").forEach(el => el.onchange = () => { S.donors[+el.dataset.delay].delay = parseInt(el.value||"0",10)||0; renderDonors(); renderSummary(); });
   box.querySelectorAll("[data-speed]").forEach(el => el.onchange = () => { S.donors[+el.dataset.speed].speed = el.value; renderDonors(); });
@@ -789,7 +805,7 @@ function renderDonors(){
 }
 async function analyze(d){
   if(d.busy) return;
-  d.busy = true; renderDonors(); renderSummary();
+  d.busy = true; d.busySince = Date.now(); renderDonors(); renderSummary();
   try{
     const r = await api("/api/analyze", {method:"POST", body:{main:S.main.path, donor:d.info.path, src_ref:d.srcRef, dst_ref:d.dstRef}});
     d.result = r;
@@ -824,7 +840,13 @@ function renderSummary(){
     <p>${busy ? L("sum.busy") : shaky ? L("sum.shaky") : parts.length ? L("sum.go") : L("sum.tick")}</p></div>`;
   box.classList.remove("hidden");
   btn.disabled = busy || !parts.length;
+  btn.textContent = busy ? L("act.waitsync") : L("act.queue");
 }
+// seconds counter in "listening" blocks
+setInterval(() => $$("[data-elapsed]").forEach(el => {
+  const s = Math.max(0, Math.round((Date.now() - +el.dataset.elapsed) / 1000));
+  el.textContent = s ? L("sync.elapsed", {s}) : "";
+}), 1000);
 function packState(){
   S.outMode = $("#outMode").value; S.outName = $("#outName").value; S.compat = $("#outCompat").value;
   return JSON.parse(JSON.stringify({...S, donors:S.donors.map(d => ({...d, busy:false}))}));
