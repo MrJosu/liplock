@@ -386,6 +386,8 @@ input:disabled,select:disabled{opacity:.4}
           <label class="field"><span data-i18n="s.langs"></span><input type="text" id="sLangs" data-i18n-ph="s.langs.ph"></label>
           <label class="field"><span data-i18n="s.remove"></span><input type="text" id="sRemove" data-i18n-ph="s.remove.ph"></label>
           <label class="field"><span data-i18n="s.default"></span><input type="text" id="sDefault" data-i18n-ph="s.default.ph"></label>
+          <label class="toggle"><input type="checkbox" id="sOne"><span><span data-i18n="s.one"></span><small data-i18n="s.one.hint"></small></span></label>
+          <label class="field"><span data-i18n="s.voices"></span><input type="text" id="sVoices" data-i18n-ph="s.voices.ph"><small class="sub" data-i18n="s.voices.hint"></small></label>
         </div>
       </div>
       <div class="panel">
@@ -522,6 +524,10 @@ const STR = {
   "s.langs.ph":["rus, eng — пусто значит любые","rus, eng — empty means any"], "s.remove":["Убирать из основного","Remove from the main file"],
   "s.remove.ph":["Например ukr","For example ukr"], "s.default":["Ставить по умолчанию язык","Make this language default"],
   "s.default.ph":["Например rus","For example rus"], "s.build":["Сборка","Build"],
+  "s.one":["Одна аудиодорожка на язык","One audio track per language"],
+  "s.one.hint":["Из нескольких озвучек на одном языке берётся лучшая","Of several voice-overs in one language, the best one is taken"],
+  "s.voices":["Любимые озвучки, по приоритету","Favourite voice-overs, by priority"], "s.voices.ph":["Например: Пифагор, KvK, дубляж","For example: Pythagoras, KvK, dub"],
+  "s.voices.hint":["Ищется в названии дорожки. Если ничего не совпало: дубляж → многоголосая → двухголосая → авторская, комментарии в конце","Searched in the track name. If nothing matches: dub → multi-voice → two-voice → single-voice, commentary last"],
   "s.order":["Порядок дорожек в файле","Track order in the file"], "s.order.hint":["Сначала эти языки по порядку, внутри языка — дорожка по умолчанию","These languages first, in order; within a language the default track comes first"],
   "s.auto":["Собирать без подтверждения","Build without confirmation"], "s.auto.hint":["Только если сдвиг надёжный во всех донорах","Only when the offset is reliable in every donor"],
   "s.parallel":["Сборок одновременно","Parallel builds"], "s.parallel.1":["1 — бережно к дискам","1 — easy on the disks"],
@@ -745,7 +751,9 @@ $("#addDonor").onclick = () => openPicker(L("pick.donor"), async p => {
     const have = new Set(S.main.tracks.filter(t=>t.keep).map(key));
     S.donors.forEach(d => Object.keys(d.take).forEach(id => { const t=d.info.tracks.find(x=>x.id==id); if(t) have.add(key(t)); }));
     const take = {};
-    info.tracks.filter(t => t.type==="audio" && !have.has(key(t))).forEach(t => take[t.id] = {name:t.name, lang:t.lang, rel:0});
+    let cand = info.tracks.filter(t => t.type==="audio" && !have.has(key(t)));
+    if(CFG && CFG.one_per_lang) cand = bestPerLang(cand);      // the rule from Rules: one voice-over per language
+    cand.forEach(t => take[t.id] = {name:t.name, lang:t.lang, rel:0});
     const d = {info, take, result:null, delay:0, speed:"same", custom:1, busy:false};
     const da = info.tracks.filter(t=>t.type==="audio"), ma = S.main.tracks.filter(t=>t.type==="audio");
     if(da.length && ma.length){ [d.srcRef, d.dstRef] = suggestRef(da, ma); }
@@ -761,6 +769,21 @@ function suggestRef(da, ma){
   const ml = new Set(ma.map(t=>t.lang));
   for(const l of ["eng","rus", ...da.map(t=>t.lang)]) if(ml.has(l) && da.some(t=>t.lang===l)) return [da.find(t=>t.lang===l).id, ma.find(t=>t.lang===l).id];
   return [da[0].id, ma[0].id];
+}
+// same ranking as on the server: favourite from Rules → dub → multi → two-voice → single, commentary last
+function voiceRank(t){
+  const n = (t.name||"").toLowerCase(), ch = -(t.channels||0);
+  if(/коммент|comment/.test(n)) return [3,0,0];
+  const fav = (CFG && CFG.voices) || [], order = (CFG && CFG.vo_order) || [];
+  for(let i=0;i<fav.length;i++) if(fav[i] && n.includes(fav[i].toLowerCase())) return [0,i,ch];
+  for(let i=0;i<order.length;i++) if(n.includes(order[i])) return [1,i,ch];
+  return [2,0,ch];
+}
+const rankLess = (a, b) => { for(let i=0;i<3;i++){ if(a[i]!==b[i]) return a[i]<b[i]; } return false; };
+function bestPerLang(tracks){
+  const best = {};
+  tracks.forEach(t => { const c = best[t.lang]; if(!c || rankLess(voiceRank(t), voiceRank(c))) best[t.lang] = t; });
+  return tracks.filter(t => best[t.lang] === t);
 }
 function relOf(d, id){ const r = d.result && d.result.rel && d.result.rel[id]; return r ? r.rel : 0; }
 function relNotes(d){
@@ -1100,6 +1123,7 @@ async function loadSettings(){
   $("#sEnabled").checked = s.enabled; $("#sSubs").checked = s.take_subs; $("#sMode").value = s.mode;
   $("#sLangs").value = (s.langs||[]).join(", "); $("#sRemove").value = (s.remove_langs||[]).join(", "); $("#sDefault").value = s.default_lang||"";
   $("#sOrder").value = (s.order_langs||[]).join(", ");
+  $("#sOne").checked = !!s.one_per_lang; $("#sVoices").value = (s.voices||[]).join(", ");
   $("#sAuto").checked = s.auto_build; $("#sParallel").value = String(s.parallel||1); $("#sAfter").value = s.after;
   $("#sCompat").value = s.compat || "off";
   const w = CFG.watch_dir, o = CFG.output_dir, ex = L("s.tree.example");
@@ -1115,8 +1139,10 @@ async function loadSettings(){
 $("#saveSettings").onclick = async () => {
   try{ await api("/api/settings", {method:"POST", body:{enabled:$("#sEnabled").checked, take_subs:$("#sSubs").checked, mode:$("#sMode").value,
       langs:$("#sLangs").value, remove_langs:$("#sRemove").value, default_lang:$("#sDefault").value, order_langs:$("#sOrder").value,
+      one_per_lang:$("#sOne").checked, voices:$("#sVoices").value,
       auto_build:$("#sAuto").checked, parallel:+$("#sParallel").value, after:$("#sAfter").value, compat:$("#sCompat").value}});
-    CFG.compat = $("#sCompat").value; toast(L("t.rules")); loadSettings(); }catch(e){ toast(e.message); }
+    CFG.compat = $("#sCompat").value; CFG.one_per_lang = $("#sOne").checked;
+    CFG.voices = $("#sVoices").value.split(",").map(x => x.trim().toLowerCase()).filter(Boolean); toast(L("t.rules")); loadSettings(); }catch(e){ toast(e.message); }
 };
 
 /* ================= старт / start ================= */

@@ -23,6 +23,7 @@ You have a film in 4K with only English audio and an older edition with the dub 
 - **Compatibility.** DTS, TrueHD, FLAC and PCM from donors can be replaced with E-AC3 640k, or such a copy can be added next to them. Apple TV, TVs and soundbars play E-AC3 without trouble; with "add a copy" the original stays.
 - **Mux as is.** For a track already synced to this file, the sync check can be switched off with one tick.
 - **Batch queue.** Queue many drafts at once, run 1–4 builds in parallel.
+- **One voice-over per language.** When a donor has five Russian tracks and you need one, LipLock takes the best: first by your list of favourite voice-overs (for example "Pythagoras, KvK"), otherwise dub → multi-voice → two-voice → single-voice, commentary last. Turn it on under Rules.
 - **Quick picks.** Buttons above the track table — All, Audio, Subtitles and one per language — tick or untick a whole group with one click.
 - **Track order.** Languages go in the order you set (for example Russian, then English); within a language the default track comes first.
 - **Web UI** in dark and light themes (or following the system), in Russian and English. The language switches on the fly, including results that were already measured.

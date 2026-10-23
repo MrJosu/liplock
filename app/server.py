@@ -61,6 +61,8 @@ DEFAULT_SETTINGS = {
     "mode": os.environ.get("AUTO_MODE", "new"),          # new | all
     "langs": env_list("AUTO_LANGS"),
     "remove_langs": env_list("AUTO_REMOVE_LANGS"),
+    "one_per_lang": env_bool("AUTO_ONE_PER_LANG", False),     # only the best audio track per language
+    "voices": env_list("AUTO_VOICES"),                       # favourite voice-overs, by priority
     "default_lang": os.environ.get("AUTO_DEFAULT_LANG", "").strip().lower(),
     "take_subs": env_bool("AUTO_TAKE_SUBS", True),
     "auto_build": env_bool("AUTO_BUILD", False),
@@ -740,6 +742,8 @@ def api_config():
                     "speeds": [{"key": c["key"], "factor": c["factor"], "label": core.speed_label(c["key"])}
                                for c in core.CANDIDATES],
                     "lang": i18n.get_lang(), "compat": SETTINGS.get("compat", "off"),
+                    "one_per_lang": bool(SETTINGS.get("one_per_lang")), "voices": SETTINGS.get("voices") or [],
+                    "vo_order": core.VO_ORDER,
                     "reencode_above": core.REENCODE_ABOVE, "poll": POLL_SECONDS, "stable": STABLE_SECONDS})
 
 
@@ -961,7 +965,7 @@ def api_get_settings():
 def api_settings():
     b = request.get_json(force=True)
     with lock:
-        for k in ("enabled", "take_subs", "auto_build"):
+        for k in ("enabled", "take_subs", "auto_build", "one_per_lang"):
             if k in b:
                 SETTINGS[k] = bool(b[k])
         if b.get("mode") in ("new", "all"):
@@ -970,7 +974,7 @@ def api_settings():
             SETTINGS["after"] = b["after"]
         if b.get("compat") in ("off", "replace", "add"):
             SETTINGS["compat"] = b["compat"]
-        for k in ("langs", "remove_langs"):
+        for k in ("langs", "remove_langs", "voices"):
             if k in b:
                 v = b[k].split(",") if isinstance(b[k], str) else b[k]
                 SETTINGS[k] = [x.strip().lower() for x in v if x.strip()]

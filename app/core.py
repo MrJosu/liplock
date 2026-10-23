@@ -419,6 +419,25 @@ def track_key(tr):
     return (tr["type"], tr["lang"], tr["codec"], tr.get("channels"))
 
 
+# when only one audio track per language is wanted and no favourite matches: dub first, commentary last
+VO_ORDER = ["дубляж", "дублир", "dub", "многоголос", "mvo", "двухголос", "dvo", "авторск", "avo", "одноголос"]
+COMMENTARY_RE = re.compile(r"коммент|comment", re.I)
+
+
+def voice_rank(tr, prefer=()):
+    """Lower is better: a favourite from the list (in its order), then the usual kinds, commentary last."""
+    name = (tr.get("name") or "").lower()
+    if COMMENTARY_RE.search(name):
+        return (3, 0, 0)
+    for i, kw in enumerate(prefer or []):
+        if kw and kw.lower() in name:
+            return (0, i, -(tr.get("channels") or 0))
+    for i, kw in enumerate(VO_ORDER):
+        if kw in name:
+            return (1, i, -(tr.get("channels") or 0))
+    return (2, 0, -(tr.get("channels") or 0))
+
+
 def suggest_take(donor_info, existing, settings):
     """Which donor tracks to tick by the rules. existing — set of track_key already present."""
     langs = settings.get("langs") or []
@@ -434,6 +453,15 @@ def suggest_take(donor_info, existing, settings):
         if settings.get("mode", "new") == "new" and track_key(tr) in existing:
             continue
         out.append(tr)
+    if settings.get("one_per_lang"):
+        prefer = settings.get("voices") or []
+        best = {}
+        for tr in out:
+            if tr["type"] == "audio":
+                cur = best.get(tr["lang"])
+                if cur is None or voice_rank(tr, prefer) < voice_rank(cur, prefer):
+                    best[tr["lang"]] = tr
+        out = [tr for tr in out if tr["type"] != "audio" or best.get(tr["lang"]) is tr]
     return out
 
 
