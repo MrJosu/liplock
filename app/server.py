@@ -189,7 +189,7 @@ def state_to_plan(state, subfolder=None):
             tracks.append(tr)
         if tracks:
             index_map[orig_i] = len(donors)
-            donors.append({"path": path, "info": info, "tracks": tracks,
+            donors.append({"path": path, "info": info, "tracks": tracks, "raw": bool(d.get("raw")),
                            "delay": int(round(float(d.get("delay") or 0))), "factor": factor_of(d)})
 
     all_a = [t["id"] for t in main_info["tracks"] if t["type"] == "audio"]

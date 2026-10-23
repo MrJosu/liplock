@@ -15,7 +15,7 @@ You have a film in 4K with only English audio and an older edition with the dub 
 - **Sync by audio.** Cross-correlation at 8 points across the film finds the offset to the millisecond and tells a stable offset from a real edit difference.
 - **Frame rate differences.** 24 ↔ 23.976 is fixed by stretching timestamps without re-encoding; 25 (PAL) ↔ 23.976 is re-encoded to E-AC3 with speed and pitch corrected.
 - **Badly muxed voice-overs.** Every donor track is also compared to the donor's original inside the same file; a track muxed 190 ms late gets its own correction.
-- **Post-check.** After each build the result is listened to: every new track must match the main file's original at 5 points. Problems show up in the queue right away.
+- **Two-step post-check.** After each build the result is listened to: every new track is compared with the main file's original, and also with the same track in the donor to confirm the move was exact (right track, offset, speed, no gaps). When a dub can't be compared with the original directly, sync is confirmed by the chain: donor original ↔ main file plus an exact move. Problems show up in the queue right away.
 - **Watch folder with drafts.** One folder per film with `main/` and `donors/`. LipLock ticks tracks by your rules, measures the offset and waits for you to confirm — or builds on its own when everything is reliable.
 - **Whole seasons.** Put the main episodes and the donors into two folders — LipLock pairs them by episode number (S01E02, 1x02) and makes a draft per episode. Every episode is synced on its own.
 - **Different lengths.** An extra recap, logos or a different intro at the start is just an offset: the search window grows with the length difference (up to 10 minutes). Trimmed credits at the end do not affect sync.
@@ -114,7 +114,7 @@ You get one draft per episode. If the season is already in your library, skip th
 2. **Offset.** Six more points are measured around the prediction. If the offset is the same everywhere, sync is reliable. A single outlier is rechecked nearby; if it still disagrees but its neighbours agree, it is reported as a false match, not as an edit.
 3. **Per-track correction.** Each donor audio track is compared with the reference track of the same donor.
 4. **Mux.** `mkvmerge` with `--sync` per track and `--track-order` for the language order. PAL tracks are re-encoded with `ffmpeg`.
-5. **Post-check.** Each new track is compared with the main file's original at five points of the finished file, and the video parameters (codec, bit depth, HDR, Dolby Vision) with the main file.
+5. **Post-check.** Each new track is compared with the main file's original at five points of the finished file (up to nine for a dub when too few match), then with the same track in the donor, taking the applied offset and speed into account. The video parameters (codec, bit depth, HDR, Dolby Vision) are compared with the main file.
 
 When the files differ a lot in length, the first search window widens to the length difference (±10 minutes at most); if nothing matches near the start, the search continues further into the film.
 

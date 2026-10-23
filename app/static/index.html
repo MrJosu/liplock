@@ -937,7 +937,7 @@ function checkBlock(c){
   const lamp = c.ok===true ? "ok" : c.ok===false ? "warn" : "";
   const v = c.video ? `<div class="check-item"><span class="lamp ${c.video.ok===true?"ok":c.video.ok===false?"warn":""}" style="width:7px;height:7px"></span><span>${esc(c.video.text)}</span></div>` : "";
   return `<div class="check"><div class="row" style="gap:8px"><span class="lamp ${lamp}"></span><b>${esc(c.message)}</b></div>${v}
-    ${(c.items||[]).map(it => `<div class="check-item"><span class="lamp ${it.status==="ok"?"ok":it.status==="warn"?"warn":""}" style="width:7px;height:7px"></span><span><b>${esc(it.name)}</b> ${esc(it.text)}</span></div>`).join("")}</div>`;
+    ${(c.items||[]).map(it => `<div class="check-item"><span class="lamp ${it.status==="ok"?"ok":it.status==="warn"?"warn":""}" style="width:7px;height:7px"></span><span><b>${esc(it.name)}</b> ${esc(it.text)}${it.xfer?`<br><span class="sub">${esc(it.xfer)}</span>`:""}</span></div>`).join("")}</div>`;
 }
 function renderDrafts(data){
   const list = $("#draftList");

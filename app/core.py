@@ -552,6 +552,11 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
         return []
 
     steps = sum(len(converted(d)) for d in plan["donors"]) + 1
+
+    def origin(d, x):
+        """Where a new track came from and how it was moved: out_time = donor_time × factor + delay."""
+        return {"src": d["path"], "src_tid": x["id"], "delay": x.get("delay", d["delay"]),
+                "factor": d["factor"], "raw": bool(d.get("raw"))}
     done = [0]
 
     def step_progress(frac, phase):
@@ -608,7 +613,7 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
                     stretch = d["factor"]                  # small speed difference stays in timestamps
                 fid += 1
                 audio.append({"fid": fid, "tid": 0, "lang": x.get("lang") or "und", "new": True,
-                              "default": is_default(i, x["id"]), "name": name})
+                              "default": is_default(i, x["id"]), "name": name, **origin(d, x)})
                 cmd += _sync(0, x.get("delay", d["delay"]), stretch)
                 cmd += ["--language", f"0:{x.get('lang') or 'und'}", "--track-name", f"0:{name}",
                         "--default-track-flag", f"0:{1 if is_default(i, x['id']) else 0}", tmp]
@@ -626,7 +631,7 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
                 if x["type"] == "audio":
                     audio.append({**entry, "new": True,
                                   "default": is_default(i, x["id"]) and x["id"] not in conv_ids,
-                                  "name": x.get("name") or track_label(x)})
+                                  "name": x.get("name") or track_label(x), **origin(d, x)})
                 else:
                     subs.append({**entry, "default": False})
             for x in direct:
@@ -741,6 +746,39 @@ def check_video(main_path, output):
 
 # ---------------------------------------------------------------- post-check
 
+def _transfer(output, out_tid, out_dur, meta, cancel, durs):
+    """Compares the track in the result with the same track in the donor. The audio is the same,
+    so every point should match and show exactly the offset that was applied. This proves the
+    move itself (right track, offset, speed, no gaps), not the sync with the picture."""
+    src, D, F = meta["src"], float(meta.get("delay") or 0), float(meta.get("factor") or 1.0)
+    if src not in durs:
+        durs[src] = (get_info(src) or {}).get("duration") or 0
+    src_dur = durs[src]
+    vals, tried = [], 0
+    for frac in CHECK_POINTS + CHECK_EXTRA:
+        if tried >= len(CHECK_POINTS):
+            break
+        t_out = out_dur * frac
+        s = (t_out - D / 1000) / F                     # the same moment in the donor
+        if s < 2 or s + CHUNK > src_dur - 1 or t_out + CHUNK * F > out_dur - 1:
+            continue                                    # outside one of the files (different length)
+        _check(cancel)
+        tried += 1
+        a, a0, b, b0 = _grab(src, meta["src_tid"], output, out_tid, s, D + (F - 1) * s * 1000, 2)
+        r = _correlate(a, a0, b, b0, F)
+        if r and r[1] >= MIN_CONFIDENCE:
+            vals.append(r[0] - (F - 1) * a0 * 1000 - D)  # deviation from the applied offset
+    if not tried:
+        return None
+    good = [v for v in vals if abs(v) <= TOLERANCE_MS]
+    if len(good) >= min(3, tried):
+        return {"ok": True, "n": len(good), "of": tried, "spec": M("c.xfer.ok", n=len(good), of=tried, ms=D)}
+    if len(vals) >= min(3, tried):
+        dev = float(np.median(vals))
+        return {"ok": False, "n": len(good), "of": tried, "spec": M("c.xfer.bad", ms=dev)}
+    return {"ok": None, "n": len(good), "of": tried, "spec": M("c.xfer.unknown")}
+
+
 def post_check(output, plan, audio_order, log=lambda m: None, cancel=None):
     """Listens to the result: every new audio track must line up with the main file's original.
     audio_order — audio tracks of the result in their final order.
@@ -784,6 +822,7 @@ def _post_audio(output, plan, audio_order, info, out_audio, res, log, cancel):
     dur = info["duration"] or plan["main_info"].get("duration") or 0
 
     bad = unknown = 0
+    durs = {}
     for k, meta in new:
         _check(cancel)
         t_out = out_audio[k]
@@ -818,16 +857,35 @@ def _post_audio(output, plan, audio_order, info, out_audio, res, log, cancel):
                 item["status"] = "warn"
                 say(item, "text", text)
         else:
-            unknown += 1
             item["status"] = "unknown"
             say(item, "text", M("c.unknown"))
+        if meta.get("src"):
+            try:
+                x = _transfer(output, t_out["id"], dur, meta, cancel, durs)
+            except Cancelled:
+                raise
+            except Exception:  # noqa: BLE001 — the extra check must never break the result
+                x = None
+            if x:
+                say(item, "xfer", x["spec"])
+                item["xfer_ok"] = x["ok"]
+                if x["ok"] is False and item["status"] != "warn":
+                    item["status"] = "warn"
+                    bad += 1
+                elif x["ok"] and item["status"] == "unknown" and not meta.get("raw"):
+                    # direct comparison impossible, but the chain holds: the donor's reference was
+                    # matched to the main file by the analysis, and the move is exact
+                    item["status"] = "ok"
+                    say(item, "text", M("c.chain"))
+        if item["status"] == "unknown":
+            unknown += 1
         if meta.get("default") and not t_out.get("default"):
             if item["status"] != "warn":
                 bad += 1
             item["status"] = "warn"
             say(item, "text", join([item["text_t"], M("c.flag")]))
         res["items"].append(item)
-        log(t("c.log", name=meta["name"], text=item["text"]))
+        log(t("c.log", name=meta["name"], text=item["text"] + (" " + item["xfer"] if item.get("xfer") else "")))
 
     if bad:
         res["ok"] = False
