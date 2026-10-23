@@ -455,16 +455,32 @@ def run_process(cmd, on_line, cancel=None):
     return proc.returncode, tail
 
 
+# codecs many players and TVs cannot pass through as is (Apple TV, many smart TVs and soundbars)
+COMPAT_RE = re.compile(r"DTS|TrueHD|MLP|FLAC|PCM", re.I)
+
+
+def needs_compat(track):
+    return track.get("type") == "audio" and bool(COMPAT_RE.search(track.get("codec") or ""))
+
+
 def _reencode(src, track, factor, out_path, duration, on_frac, cancel):
+    """Re-encode one track to E-AC3. factor != 1 also corrects the speed (PAL); factor == 1 only
+    converts the format. E-AC3 allows up to 5.1 and 32/44.1/48 kHz, so 7.1 and 96 kHz are reduced."""
     sr = int(track.get("sr") or 48000)
     ch = int(track.get("channels") or 2)
-    new_rate = round(sr / factor)
-    residual = factor / (sr / new_rate)        # rounding error — fixed via timestamps
+    out_sr = sr if sr in (32000, 44100, 48000) else 48000
+    if abs(factor - 1) > 1e-9:
+        new_rate = round(sr / factor)
+        residual = factor / (sr / new_rate)    # rounding error — fixed via timestamps
+        af = ["-af", f"asetrate={new_rate},aresample={out_sr}"]
+    else:
+        residual = 1.0
+        af = ["-ar", str(out_sr)]
     ac = min(ch, 6)
     br = "640k" if ac >= 6 else ("256k" if ac >= 2 else "128k")
     total_us = (duration or 0) * factor * 1e6
     cmd = [FFMPEG, "-v", "error", "-nostats", "-progress", "pipe:1", "-y", "-i", src,
-           "-map", f"0:{track['id']}", "-af", f"asetrate={new_rate},aresample={sr}",
+           "-map", f"0:{track['id']}", *af,
            "-c:a", "eac3", "-b:a", br, "-ac", str(ac), "-f", "matroska", out_path]
 
     def on_line(line):
@@ -497,7 +513,8 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
       main, main_info, main_audio_keep, main_subs_keep,
       default_audio ({"src": "main"|donor_index, "id": tid} | None),
       donors: [{path, info, delay, factor, tracks: [{id, type, lang, name, delay?, ...}]}],
-      order_langs: ["rus", "eng", ...], check_ref
+      order_langs: ["rus", "eng", ...], check_ref,
+      compat: "off" | "replace" | "add"   — DTS/TrueHD/FLAC/PCM from donors → E-AC3
     }
     Returns (output, check).
     """
@@ -513,9 +530,17 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
     def is_default(src, tid):
         return bool(dflt) and dflt.get("src") == src and dflt.get("id") == tid
 
-    reenc = [1 for d in plan["donors"] if abs(d["factor"] - 1) > REENCODE_ABOVE
-             for x in d["tracks"] if x["type"] == "audio"]
-    steps = len(reenc) + 1
+    compat = plan.get("compat") or "off"
+
+    def converted(d):
+        """Audio tracks of a donor that get an E-AC3 version (speed fix or compatibility)."""
+        if abs(d["factor"] - 1) > REENCODE_ABOVE:
+            return [x for x in d["tracks"] if x["type"] == "audio"]
+        if compat in ("replace", "add"):
+            return [x for x in d["tracks"] if needs_compat(x)]
+        return []
+
+    steps = sum(len(converted(d)) for d in plan["donors"]) + 1
     done = [0]
 
     def step_progress(frac, phase):
@@ -548,26 +573,34 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
             big = abs(d["factor"] - 1) > REENCODE_ABOVE
             a_tr = [x for x in d["tracks"] if x["type"] == "audio"]
             s_tr = [x for x in d["tracks"] if x["type"] == "subtitles"]
-            direct = s_tr + ([] if big else a_tr)
+            conv = converted(d)
+            conv_ids = {x["id"] for x in conv}
+            keep_orig = not big and compat == "add"          # the original stays next to its E-AC3 copy
+            direct = s_tr + [x for x in a_tr if x["id"] not in conv_ids or keep_orig]
 
-            if big:
-                for x in a_tr:
-                    _check(cancel)
-                    phase = t("b.reencode", id=x["id"], file=os.path.basename(d["path"]))
-                    log(phase + t("b.reencode.why"))
-                    tmp = os.path.join(tmp_dir, f"d{i}_t{x['id']}.mka")
-                    dur = (d.get("info") or {}).get("duration") or main_info.get("duration")
-                    residual, ac = _reencode(d["path"], x, d["factor"], tmp, dur,
-                                             lambda fr, ph=phase: step_progress(fr, ph), cancel)
-                    done[0] += 1
+            for x in conv:
+                _check(cancel)
+                phase = t("b.reencode", id=x["id"], file=os.path.basename(d["path"]))
+                log(phase + t("b.reencode.why" if big else "b.compat.why"))
+                tmp = os.path.join(tmp_dir, f"d{i}_t{x['id']}.mka")
+                dur = (d.get("info") or {}).get("duration") or main_info.get("duration")
+                residual, ac = _reencode(d["path"], x, d["factor"] if big else 1.0, tmp, dur,
+                                         lambda fr, ph=phase: step_progress(fr, ph), cancel)
+                done[0] += 1
+                if big:
                     name = (t("b.name.fixed", name=x["name"]) if x.get("name")
                             else t("b.name.fixed2", ch=ac, codec=x.get("codec", "audio")))
-                    fid += 1
-                    audio.append({"fid": fid, "tid": 0, "lang": x.get("lang") or "und", "new": True,
-                                  "default": is_default(i, x["id"]), "name": name})
-                    cmd += _sync(0, x.get("delay", d["delay"]), residual)
-                    cmd += ["--language", f"0:{x.get('lang') or 'und'}", "--track-name", f"0:{name}",
-                            "--default-track-flag", f"0:{1 if is_default(i, x['id']) else 0}", tmp]
+                    stretch = residual
+                else:
+                    name = (t("b.name.compat", name=x["name"]) if x.get("name")
+                            else t("b.name.compat2", ch=ac, codec=x.get("codec", "audio")))
+                    stretch = d["factor"]                  # small speed difference stays in timestamps
+                fid += 1
+                audio.append({"fid": fid, "tid": 0, "lang": x.get("lang") or "und", "new": True,
+                              "default": is_default(i, x["id"]), "name": name})
+                cmd += _sync(0, x.get("delay", d["delay"]), stretch)
+                cmd += ["--language", f"0:{x.get('lang') or 'und'}", "--track-name", f"0:{name}",
+                        "--default-track-flag", f"0:{1 if is_default(i, x['id']) else 0}", tmp]
 
             if not direct:
                 continue
@@ -580,7 +613,8 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
             for x in sorted(direct, key=lambda y: y["id"]):
                 entry = {"fid": fid, "tid": x["id"], "lang": x.get("lang") or "und"}
                 if x["type"] == "audio":
-                    audio.append({**entry, "new": True, "default": is_default(i, x["id"]),
+                    audio.append({**entry, "new": True,
+                                  "default": is_default(i, x["id"]) and x["id"] not in conv_ids,
                                   "name": x.get("name") or track_label(x)})
                 else:
                     subs.append({**entry, "default": False})
@@ -591,7 +625,8 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
                 if x.get("name"):
                     cmd += ["--track-name", f"{tid}:{x['name']}"]
                 if x["type"] == "audio":
-                    cmd += ["--default-track-flag", f"{tid}:{1 if is_default(i, tid) else 0}"]
+                    flag = is_default(i, tid) and tid not in conv_ids
+                    cmd += ["--default-track-flag", f"{tid}:{1 if flag else 0}"]
             cmd.append(d["path"])
 
         # final track order: video, audio by language priority, subtitles by language priority

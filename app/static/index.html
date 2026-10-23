@@ -293,6 +293,9 @@ input:disabled,select:disabled{opacity:.4}
           <label class="field"><span data-i18n="ed.where"></span>
             <select id="outMode"><option value="beside" data-i18n="ed.beside"></option><option value="output" data-i18n="ed.tooutput"></option></select></label>
           <label class="field"><span data-i18n="ed.name"></span><input type="text" id="outName" data-i18n-ph="ed.name.ph"></label>
+          <label class="field"><span data-i18n="cp.label"></span>
+            <select id="outCompat"><option value="off" data-i18n="cp.off"></option><option value="replace" data-i18n="cp.replace"></option><option value="add" data-i18n="cp.add"></option></select>
+            <small class="sub" data-i18n="cp.hint"></small></label>
           <label class="toggle" style="align-self:end;padding-bottom:6px"><input type="radio" name="dflt" value="keep" checked><span><span data-i18n="ed.keepdefault"></span><small data-i18n="ed.keepdefault.hint"></small></span></label>
         </div>
         <div class="verdict hidden" id="summary"></div>
@@ -343,6 +346,9 @@ input:disabled,select:disabled{opacity:.4}
             <select id="sParallel"><option value="1" data-i18n="s.parallel.1"></option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label>
           <label class="field"><span data-i18n="s.after"></span>
             <select id="sAfter"><option value="keep" data-i18n="s.after.keep"></option><option value="delete" data-i18n="s.after.delete"></option></select></label>
+          <label class="field"><span data-i18n="cp.label"></span>
+            <select id="sCompat"><option value="off" data-i18n="cp.off"></option><option value="replace" data-i18n="cp.replace"></option><option value="add" data-i18n="cp.add"></option></select>
+            <small class="sub" data-i18n="cp.hint"></small></label>
         </div>
       </div>
       <div class="row"><button class="btn go" id="saveSettings" data-i18n="s.save"></button><span class="sub" data-i18n="s.codes"></span></div>
@@ -396,6 +402,10 @@ const STR = {
   "ed.donors":["Доноры","Donors"], "ed.donors.hint":["Отсюда берутся дорожки. Сдвиг и скорость определяются по совпадению звука.","Tracks are taken from here. Offset and speed are found by matching the audio."],
   "ed.adddonor":["Добавить донор","Add donor"], "ed.result":["Результат","Result"], "ed.where":["Куда сохранить","Save to"],
   "ed.beside":["Рядом с основным файлом","Next to the main file"], "ed.tooutput":["В папку «Готовое»","To the output folder"],
+  "cp.label":["DTS, TrueHD, FLAC, PCM из доноров","DTS, TrueHD, FLAC, PCM from donors"],
+  "cp.off":["Оставить как есть","Keep as is"], "cp.replace":["Заменить на E-AC3","Replace with E-AC3"],
+  "cp.add":["Добавить копию в E-AC3 рядом","Add an E-AC3 copy next to it"],
+  "cp.hint":["E-AC3 640k играет почти везде: Apple TV, телевизоры, саундбары. Максимум 5.1, Atmos из TrueHD не сохраняется","E-AC3 640k plays almost everywhere: Apple TV, TVs, soundbars. Up to 5.1; Atmos from TrueHD is not kept"],
   "ed.name":["Имя файла","File name"], "ed.name.ph":["Как у основного файла","Same as the main file"],
   "ed.keepdefault":["Дорожку по умолчанию не менять","Keep the default track"], "ed.keepdefault.hint":["Или выбери её кружком в таблицах","Or pick one with the radio buttons"],
   "ed.savedraft":["Сохранить черновик","Save draft"], "ed.clear":["Очистить","Clear"], "ed.closedraft":["Закрыть без сохранения","Close without saving"],
@@ -410,7 +420,7 @@ const STR = {
   "nostreams":["Нет аудио и субтитров","No audio or subtitles"],
   "sync.listening":["Слушаю оба файла","Listening to both files"], "sync.listening.p":["Обычно 10–60 секунд","Usually 10–60 seconds"],
   "sync.none":["Сверять не по чему","Nothing to compare"],
-  "sync.none.p":["В доноре нет звука. Укажи сдвиг вручную — для внешних субтитров обычно 0.","The donor has no audio. Enter the offset manually — usually 0 for external subtitles."],
+  "sync.none.p":["В доноре нет звука, проверить по нему нельзя. Укажи сдвиг вручную: 0 — если субтитры сделаны под основной файл, сдвиг донора — если под донор.","The donor has no audio, so it can't be checked. Enter the offset manually: 0 if the subtitles were made for the main file, the donor's offset if they were made for the donor."],
   "sync.src":["Сверять дорожку донора","Compare donor track"], "sync.dst":["с дорожкой основного","with main track"],
   "sync.redo":["Пересчитать","Re-measure"], "sync.delay":["Сдвиг, мс","Offset, ms"], "sync.speed":["Скорость","Speed"],
   "sync.custom":["Свой множитель","Custom factor"], "sync.factor":["Множитель","Factor"],
@@ -492,7 +502,7 @@ let S = blankState();
 let ctx = {kind:"manual"};          // or {kind:"draft", id, name}
 let VIEW = "drafts";
 
-function blankState(){ return {main:null, donors:[], dflt:"keep", outMode:"beside", outName:""}; }
+function blankState(){ return {main:null, donors:[], dflt:"keep", outMode:"beside", outName:"", compat:null}; }
 const dec = s => LANG==="ru" ? s.replace(".", ",") : s;
 function fmtSize(b){ if(b==null) return ""; const u = LANG==="ru" ? ["Б","КБ","МБ","ГБ","ТБ"] : ["B","KB","MB","GB","TB"]; let i=0; while(b>=1024&&i<4){b/=1024;i++} return dec(b.toFixed(i>=3?2:i?1:0))+" "+u[i]; }
 function fmtDur(s){ if(!s) return "—"; s=Math.round(s); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h?h+":":"")+String(m).padStart(h?2:1,"0")+":"+String(x).padStart(2,"0"); }
@@ -754,7 +764,7 @@ function renderSummary(){
   btn.disabled = busy || !parts.length;
 }
 function packState(){
-  S.outMode = $("#outMode").value; S.outName = $("#outName").value;
+  S.outMode = $("#outMode").value; S.outName = $("#outName").value; S.compat = $("#outCompat").value;
   return JSON.parse(JSON.stringify({...S, donors:S.donors.map(d => ({...d, busy:false}))}));
 }
 function renderEditor(){
@@ -766,6 +776,7 @@ function renderEditor(){
   $("#saveDraft").classList.toggle("hidden", !draft);
   $("#reset").textContent = L(draft ? "ed.closedraft" : "ed.clear");
   $("#outMode").value = S.outMode || "beside"; $("#outName").value = S.outName || "";
+  $("#outCompat").value = S.compat || (CFG && CFG.compat) || "off";
   renderMain(); renderDonors(); renderSummary();
 }
 $("#submit").onclick = async () => {
@@ -937,6 +948,7 @@ async function loadSettings(){
   $("#sLangs").value = (s.langs||[]).join(", "); $("#sRemove").value = (s.remove_langs||[]).join(", "); $("#sDefault").value = s.default_lang||"";
   $("#sOrder").value = (s.order_langs||[]).join(", ");
   $("#sAuto").checked = s.auto_build; $("#sParallel").value = String(s.parallel||1); $("#sAfter").value = s.after;
+  $("#sCompat").value = s.compat || "off";
   const w = CFG.watch_dir, o = CFG.output_dir, ex = L("s.tree.example");
   $("#tree").innerHTML = `<div>${ICON_DIR}<b>${esc(w)}</b><em>${L("s.tree.watch")}</em></div>
     <div class="i1">${ICON_DIR}<b>${esc(ex)}</b><em>${L("s.tree.film")}</em></div>
@@ -950,8 +962,8 @@ async function loadSettings(){
 $("#saveSettings").onclick = async () => {
   try{ await api("/api/settings", {method:"POST", body:{enabled:$("#sEnabled").checked, take_subs:$("#sSubs").checked, mode:$("#sMode").value,
       langs:$("#sLangs").value, remove_langs:$("#sRemove").value, default_lang:$("#sDefault").value, order_langs:$("#sOrder").value,
-      auto_build:$("#sAuto").checked, parallel:+$("#sParallel").value, after:$("#sAfter").value}});
-    toast(L("t.rules")); loadSettings(); }catch(e){ toast(e.message); }
+      auto_build:$("#sAuto").checked, parallel:+$("#sParallel").value, after:$("#sAfter").value, compat:$("#sCompat").value}});
+    CFG.compat = $("#sCompat").value; toast(L("t.rules")); loadSettings(); }catch(e){ toast(e.message); }
 };
 
 /* ================= старт / start ================= */

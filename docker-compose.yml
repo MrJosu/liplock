@@ -15,6 +15,7 @@ services:
     environment:
       UI_LANG: ru            # ru | en
       TRACK_ORDER: rus,eng   # какие языки идут первыми / languages that go first
+      COMPAT: "off"          # DTS/TrueHD → E-AC3: off | replace | add
       PUID: "1000"           # владелец новых файлов (на Unraid 99) / owner of new files (99 on Unraid)
       PGID: "1000"           # группа (на Unraid 100) / group (100 on Unraid)
       TZ: Europe/London

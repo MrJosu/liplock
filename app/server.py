@@ -35,6 +35,12 @@ def env_list(name):
     return [x.strip().lower() for x in os.environ.get(name, "").split(",") if x.strip()]
 
 
+def env_choice(name, options):
+    """First option is the default; anything not in the list falls back to it."""
+    v = os.environ.get(name, "").strip().lower()
+    return v if v in options else options[0]
+
+
 MEDIA_DIRS = [d.strip().rstrip("/") or "/" for d in
               os.environ.get("MEDIA_DIRS", os.environ.get("MEDIA_DIR", "/media")).split(",") if d.strip()]
 WATCH_DIR = os.environ.get("WATCH_DIR", "/watch").rstrip("/")
@@ -61,6 +67,7 @@ DEFAULT_SETTINGS = {
     "after": os.environ.get("AUTO_AFTER", "keep"),        # keep | delete
     "parallel": int(os.environ.get("PARALLEL", "1")),
     "order_langs": env_list("TRACK_ORDER") or ["rus", "eng"],
+    "compat": env_choice("COMPAT", ("off", "replace", "add")),   # DTS/TrueHD/FLAC/PCM from donors → E-AC3
     "lang": (os.environ.get("UI_LANG", "ru").strip().lower()[:2] or "ru"),
 }
 SETTINGS_FILE = os.path.join(CONFIG_DIR, "settings.json")
@@ -212,7 +219,9 @@ def state_to_plan(state, subfolder=None):
                       if d.get("take") and d.get("dstRef") is not None), None)
     plan = {"main": main_path, "main_info": main_info, "main_audio_keep": keep_a,
             "main_subs_keep": keep_s, "default_audio": default_audio, "donors": donors,
-            "check_ref": check_ref, "order_langs": list(SETTINGS.get("order_langs") or [])}
+            "check_ref": check_ref, "order_langs": list(SETTINGS.get("order_langs") or []),
+            "compat": state.get("compat") if state.get("compat") in ("off", "replace", "add")
+            else SETTINGS.get("compat", "off")}
     return plan, target
 
 
@@ -609,7 +618,8 @@ def build_draft_state(did):
         ok_all = False
     with lock:
         out_mode = (drafts.get(did) or {}).get("out_mode") or "output"
-    state = {"main": main, "donors": donors, "dflt": dflt, "outMode": out_mode, "outName": ""}
+    state = {"main": main, "donors": donors, "dflt": dflt, "outMode": out_mode, "outName": "",
+             "compat": SETTINGS.get("compat", "off")}
     status = "ready" if ok_all else "attention"
     with lock:
         if did in drafts:
@@ -709,7 +719,7 @@ def api_config():
     return jsonify({"roots": roots(), "output_dir": OUTPUT_DIR, "watch_dir": WATCH_DIR,
                     "speeds": [{"key": c["key"], "factor": c["factor"], "label": core.speed_label(c["key"])}
                                for c in core.CANDIDATES],
-                    "lang": i18n.get_lang(),
+                    "lang": i18n.get_lang(), "compat": SETTINGS.get("compat", "off"),
                     "reencode_above": core.REENCODE_ABOVE, "poll": POLL_SECONDS, "stable": STABLE_SECONDS})
 
 
@@ -938,6 +948,8 @@ def api_settings():
             SETTINGS["mode"] = b["mode"]
         if b.get("after") in ("keep", "delete"):
             SETTINGS["after"] = b["after"]
+        if b.get("compat") in ("off", "replace", "add"):
+            SETTINGS["compat"] = b["compat"]
         for k in ("langs", "remove_langs"):
             if k in b:
                 v = b[k].split(",") if isinstance(b[k], str) else b[k]
