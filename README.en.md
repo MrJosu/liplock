@@ -24,7 +24,7 @@ You have a film in 4K with only English audio and an older edition with the dub 
 - **Mux as is.** For a track already synced to this file, the sync check can be switched off with one tick.
 - **Batch queue.** Queue many drafts at once, run 1–4 builds in parallel.
 - **Track order.** Languages go in the order you set (for example Russian, then English); within a language the default track comes first.
-- **Web UI** in a dark theme, English and Russian.
+- **Web UI** in dark and light themes (or following the system), in Russian and English. The language switches on the fly, including results that were already measured.
 
 ![Draft](docs/draft-en.png)
 

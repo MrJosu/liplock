@@ -177,3 +177,57 @@ def t(key, **kw):
         return key
     s = pair[0] if _lang[0] == "ru" else pair[1]
     return s.format(**kw) if kw else s
+
+
+# ---------------------------------------------------------------- stored messages
+# Texts that are saved (analysis verdicts, post-check results, draft notes) keep their key and
+# parameters next to the text: field "message" goes with "message_t" = ["key", {params}].
+# localize() renders them again in the current language, so switching RU/EN changes old results too.
+
+def M(key, **kw):
+    """A message that can be rendered later in any language."""
+    return [key, kw]
+
+
+def join(parts, sep=""):
+    return ["+", {"parts": list(parts), "sep": sep}]
+
+
+def lower(spec):
+    return ["lower", {"s": spec}]
+
+
+def _is_spec(x):
+    return isinstance(x, list) and len(x) == 2 and isinstance(x[0], str) and isinstance(x[1], dict)
+
+
+def render(spec):
+    if not _is_spec(spec):
+        return spec
+    key, kw = spec
+    if key == "+":
+        return kw.get("sep", "").join(str(render(p)) for p in kw.get("parts", []) if render(p) not in (None, ""))
+    if key == "lower":
+        return str(render(kw.get("s"))).lower()
+    return t(key, **{k: render(v) for k, v in kw.items()})
+
+
+def say(d, field, spec):
+    """d[field] = text in the current language, d[field + "_t"] = how to render it again."""
+    d[field] = render(spec) if spec is not None else None
+    d[field + "_t"] = spec
+    return d
+
+
+def localize(obj):
+    """Re-render every stored message in obj (in place) in the current language."""
+    if isinstance(obj, dict):
+        for k in list(obj.keys()):
+            if k.endswith("_t") and _is_spec(obj[k]):
+                obj[k[:-2]] = render(obj[k])
+            else:
+                localize(obj[k])
+    elif isinstance(obj, list):
+        for x in obj:
+            localize(x)
+    return obj

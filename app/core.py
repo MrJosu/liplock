@@ -18,7 +18,7 @@ import threading
 
 import numpy as np
 
-from i18n import t
+from i18n import t, M, render, say, join
 
 os.environ.setdefault("LANG", "C.UTF-8")      # mkvmerge takes its charset from the locale
 if not os.environ["LANG"]:
@@ -65,8 +65,12 @@ CANDIDATES = [
 ]
 
 
+def speed_spec(key, factor=1.0):
+    return M("speed.custom", f=factor) if key == "custom" else M("speed." + key)
+
+
 def speed_label(key, factor=1.0):
-    return t("speed.custom", f=factor) if key == "custom" else t("speed." + key)
+    return render(speed_spec(key, factor))
 
 
 VIDEO_EXT = {".mkv", ".mp4", ".m4v", ".avi", ".ts", ".m2ts", ".mts", ".mov", ".webm", ".wmv"}
@@ -217,10 +221,11 @@ def analyze(src, src_ref, dst, dst_ref, dur, log=lambda m: None, cancel=None, ds
     cand = CANDIDATES[best]
     f = cand["factor"]
     result = {"ok": False, "status": "no_match", "delay": None, "factor": f, "speed": cand["key"],
-              "label": speed_label(cand["key"]), "points": [], "message": ""}
+              "label": speed_label(cand["key"]), "label_t": speed_spec(cand["key"]), "points": [], "message": ""}
     if not points:
-        result.update(factor=1.0, speed="same", label=t("an.nomatch.label"),
-                      message=t("an.nomatch.msg", win=int(win)))
+        result.update(factor=1.0, speed="same")
+        say(result, "label", M("an.nomatch.label"))
+        say(result, "message", M("an.nomatch.msg", win=int(win)))
         log(result["message"])
         return result
     log(t("an.speed", label=result["label"]))
@@ -273,30 +278,35 @@ def analyze(src, src_ref, dst, dst_ref, dur, log=lambda m: None, cancel=None, ds
     med = float(np.median(offsets))
     result["delay"] = int(round(med))
     outliers = [i for i in range(len(points)) if abs(offsets[i] - med) > TOLERANCE_MS]
-    note = t("an.recheck1") if rechecked == 1 else (t("an.recheckN", n=rechecked) if rechecked else "")
+    note = M("an.recheck1") if rechecked == 1 else (M("an.recheckN", n=rechecked) if rechecked else "")
 
     if len(points) < 3:
-        result.update(status="few_points", message=t("an.few"))
+        result.update(status="few_points")
+        say(result, "message", M("an.few"))
     elif np.ptp(offsets) <= TOLERANCE_MS:
-        result.update(ok=True, status="ok", message=t("an.stable", spread=f"{np.ptp(offsets):.0f}", note=note))
+        result.update(ok=True, status="ok")
+        say(result, "message", M("an.stable", spread=f"{np.ptp(offsets):.0f}", note=note))
     elif len(points) >= 5 and len(outliers) == 1:
         # an edit difference would move every point after it; here the rest agree
         i = outliers[0]
         inl = np.delete(offsets, i)
         key = "an.out.first" if i == 0 else ("an.out.last" if i == len(points) - 1 else "an.out.mid")
-        result.update(ok=True, status="outlier", delay=int(round(float(np.median(inl)))),
-                      message=t(key, where=_fmt_t(points[i][0])))
+        result.update(ok=True, status="outlier", delay=int(round(float(np.median(inl)))))
+        say(result, "message", M(key, where=_fmt_t(points[i][0])))
     else:
         m, c = np.polyfit(s, d, 1)
         resid = d - (m * s + c)
         if np.ptp(resid) <= TOLERANCE_MS:
             f2 = float(1 + m / 1000)
-            result.update(ok=True, status="custom_drift", delay=int(round(c)), factor=f2, speed="custom",
-                          label=speed_label("custom", f2), message=t("an.drift"))
+            result.update(ok=True, status="custom_drift", delay=int(round(c)), factor=f2, speed="custom")
+            say(result, "label", speed_spec("custom", f2))
+            say(result, "message", M("an.drift"))
         else:
-            result.update(status="inconsistent", message=t("an.inconsistent"))
+            result.update(status="inconsistent")
+            say(result, "message", M("an.inconsistent"))
     if missed >= 2 and result["ok"]:
-        result.update(ok=False, status="few_points", message=t("an.missed", missed=missed, total=len(POINTS)))
+        result.update(ok=False, status="few_points")
+        say(result, "message", M("an.missed", missed=missed, total=len(POINTS)))
     log(t("an.result", delay=result["delay"], f=result["factor"], msg=result["message"]))
     return result
 
@@ -661,7 +671,7 @@ def run_job(plan, output, tmp_dir, log, progress, cancel=None):
         except Cancelled:
             raise
         except Exception as e:  # noqa: BLE001
-            check = {"ok": None, "items": [], "message": t("b.check.failed", err=e)}
+            check = say({"ok": None, "items": []}, "message", M("b.check.failed", err=str(e)))
             log(check["message"])
         progress(100.0, t("b.phase.done"))
         return output, check
@@ -709,23 +719,23 @@ def video_profile(path):
 
 
 def describe_video(v):
-    parts = [v["codec"].upper(), t("v.bits", n=v["bits"])]
+    parts = [v["codec"].upper(), M("v.bits", n=v["bits"])]
     if v.get("dims"):
         parts.append(v["dims"])
     parts.append(v["hdr"] or "SDR")
     if v.get("dovi") is not None:
-        parts.append(t("v.dv", n=v["dovi"]))
-    return ", ".join(parts)
+        parts.append(M("v.dv", n=v["dovi"]))
+    return join(parts, ", ")
 
 
 def check_video(main_path, output):
     a, b = video_profile(main_path), video_profile(output)
     if not a or not b:
-        return {"ok": None, "text": t("v.unknown")}
+        return say({"ok": None}, "text", M("v.unknown"))
     keys = ("codec", "bits", "dims", "hdr", "dovi", "mastering")
     if all(a.get(k) == b.get(k) for k in keys):
-        return {"ok": True, "text": t("v.same", desc=describe_video(b))}
-    return {"ok": False, "text": t("v.diff", a=describe_video(a), b=describe_video(b))}
+        return say({"ok": True}, "text", M("v.same", desc=describe_video(b)))
+    return say({"ok": False}, "text", M("v.diff", a=describe_video(a), b=describe_video(b)))
 
 
 # ---------------------------------------------------------------- post-check
@@ -743,18 +753,19 @@ def post_check(output, plan, audio_order, log=lambda m: None, cancel=None):
     res = _post_audio(output, plan, audio_order, info, out_audio, res, log, cancel)
     if res["video"] and res["video"]["ok"] is False:
         res["ok"] = False
-        res["message"] = res["video"]["text"] + (" " + res["message"] if res["message"] else "")
+        say(res, "message", join([res["video"]["text_t"], res.get("message_t") or res["message"]], " "))
     return res
 
 
 def _post_audio(output, plan, audio_order, info, out_audio, res, log, cancel):
     if len(out_audio) != len(audio_order):
-        res.update(ok=False, message=t("c.count", got=len(out_audio), want=len(audio_order)))
+        res["ok"] = False
+        say(res, "message", M("c.count", got=len(out_audio), want=len(audio_order)))
         log(t("c.log2", msg=res["message"]))
         return res
     new = [(k, e) for k, e in enumerate(audio_order) if e["new"]]
     if not new:
-        res["message"] = t("c.nothing")
+        say(res, "message", M("c.nothing"))
         return res
 
     by_id = {x["id"]: x for x in plan["main_info"]["tracks"]}
@@ -764,7 +775,8 @@ def _post_audio(output, plan, audio_order, info, out_audio, res, log, cancel):
         ref = next(((k, e) for k, e in kept if by_id.get(e["tid"], {}).get("lang") == "eng"), None) \
             or (kept[0] if kept else None)
     if ref is None:
-        res.update(ok=None, message=t("c.noref"))
+        res["ok"] = None
+        say(res, "message", M("c.noref"))
         return res
     ref_out = out_audio[ref[0]]["id"]
     ref_label = track_label(by_id[ref[1]["tid"]])
@@ -786,28 +798,33 @@ def _post_audio(output, plan, audio_order, info, out_audio, res, log, cancel):
             inl = [v for v in vals if abs(v - med) <= TOLERANCE_MS]
             item["offset"] = int(round(med))
             if len(inl) >= 3 and abs(med) <= TOLERANCE_MS:
-                item.update(status="ok", text=t("c.ok", ref=ref_label, n=len(inl), of=len(CHECK_POINTS), ms=med))
+                item["status"] = "ok"
+                say(item, "text", M("c.ok", ref=ref_label, n=len(inl), of=len(CHECK_POINTS), ms=med))
             else:
                 bad += 1
                 # med = time in the original − time in the new track: negative means the new one is late
-                text = (t("c.late" if med < 0 else "c.early", ref=ref_label, ms=abs(med))
-                        if abs(med) > TOLERANCE_MS else t("c.unstable", n=len(inl), of=len(vals)))
-                item.update(status="warn", text=text)
+                text = (M("c.late" if med < 0 else "c.early", ref=ref_label, ms=abs(med))
+                        if abs(med) > TOLERANCE_MS else M("c.unstable", n=len(inl), of=len(vals)))
+                item["status"] = "warn"
+                say(item, "text", text)
         else:
             unknown += 1
-            item.update(status="unknown", text=t("c.unknown"))
+            item["status"] = "unknown"
+            say(item, "text", M("c.unknown"))
         if meta.get("default") and not t_out.get("default"):
             if item["status"] != "warn":
                 bad += 1
             item["status"] = "warn"
-            item["text"] += t("c.flag")
+            say(item, "text", join([item["text_t"], M("c.flag")]))
         res["items"].append(item)
         log(t("c.log", name=meta["name"], text=item["text"]))
 
     if bad:
-        res.update(ok=False, message=t("c.bad", bad=bad, total=len(new)))
+        res["ok"] = False
+        say(res, "message", M("c.bad", bad=bad, total=len(new)))
     elif unknown:
-        res.update(ok=None, message=t("c.partial"))
+        res["ok"] = None
+        say(res, "message", M("c.partial"))
     else:
-        res["message"] = t("c.allok")
+        say(res, "message", M("c.allok"))
     return res

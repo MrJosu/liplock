@@ -401,7 +401,7 @@ def draft_finished(did, status, output=None, error=None, check=None):
         return
     if status == "done" and SETTINGS.get("after") == "delete" and all(x["status"] == "done" for x in siblings):
         shutil.rmtree(folder, ignore_errors=True)       # a season folder goes only when every episode is built
-        draft_status(did, "done", note=t("w.removed"))
+        draft_status(did, "done", note=t("w.removed"), note_t=i18n.M("w.removed"))
     else:
         write_marker(folder, {"sig": fsig, "draft": did, "status": status})
 
@@ -603,10 +603,10 @@ def build_draft_state(did):
                     for tid, v in dd["take"].items():
                         v["rel"] = rel.get(tid, {}).get("rel", 0)
                 if not res["ok"]:
-                    notes.append(f"{info['name']}: {res['label'].lower()}")
+                    notes.append(i18n.join([info["name"], i18n.lower(res.get("label_t") or res["label"])], ": "))
         elif take_list:
             ok_all = False
-            notes.append(t("d.noaudio", name=info["name"]))
+            notes.append(i18n.M("d.noaudio", name=info["name"]))
         if st.get("default_lang") and dflt == "keep":
             hit = next((t for t in take_list if t["type"] == "audio" and t["lang"] == st["default_lang"]), None)
             if hit:
@@ -614,7 +614,7 @@ def build_draft_state(did):
         donors.append(dd)
 
     if not taken_any:
-        notes.append(t("d.nothing"))
+        notes.append(i18n.M("d.nothing"))
         ok_all = False
     with lock:
         out_mode = (drafts.get(did) or {}).get("out_mode") or "output"
@@ -623,13 +623,14 @@ def build_draft_state(did):
     status = "ready" if ok_all else "attention"
     with lock:
         if did in drafts:
-            drafts[did].update(state=state, status=status, note="; ".join(notes) or None, error=None)
+            drafts[did].update(state=state, status=status, error=None)
+            i18n.say(drafts[did], "note", i18n.join(notes, "; ") if notes else None)
             touch_drafts()
     if status == "ready" and st.get("auto_build"):
         try:
             queue_draft(did)
         except Exception as e:  # noqa: BLE001
-            draft_status(did, "attention", note=str(e))
+            draft_status(did, "attention", note=str(e), note_t=None)
 
 
 def analysis_worker():
@@ -691,7 +692,7 @@ def restore_after_restart():
             try:
                 queue_draft(did)
             except Exception as e:  # noqa: BLE001
-                d.update(status="attention", note=t("e.requeue", err=e))
+                d.update(status="attention", note=t("e.requeue", err=e), note_t=i18n.M("e.requeue", err=str(e)))
     touch_drafts()
 
 
@@ -712,6 +713,25 @@ def on_error(e):
 @app.get("/")
 def index():
     return send_from_directory(app.static_folder, "index.html")
+
+
+@app.after_request
+def _localize_json(resp):
+    """Stored verdicts and notes are re-rendered in the current interface language."""
+    if resp.is_json and request.path.startswith("/api/") and resp.status_code < 400:
+        try:
+            data = resp.get_json()
+            if "_t" in resp.get_data(as_text=True):
+                resp.set_data(json.dumps(i18n.localize(data), ensure_ascii=False))
+        except Exception:  # noqa: BLE001
+            pass
+    return resp
+
+
+@app.post("/api/localize")
+def api_localize():
+    """The editor sends its state after RU/EN is switched and gets the texts in the new language."""
+    return jsonify(request.get_json(force=True))
 
 
 @app.get("/api/config")
@@ -865,7 +885,7 @@ def api_reanalyze(did):
         missing = [p for p in [d["main_path"]] + d["donor_paths"] if not os.path.exists(p)]
         if missing:
             raise ValueError(t("e.notfound", path=os.path.basename(missing[0])))
-        d.update(sig=signature([d["main_path"]] + d["donor_paths"]), status="analyzing", note=None, error=None)
+        d.update(sig=signature([d["main_path"]] + d["donor_paths"]), status="analyzing", note=None, note_t=None, error=None)
         touch_drafts()
     analysis_queue.put(did)
     return jsonify({"ok": True})
