@@ -17,7 +17,8 @@ ffmpeg и mkvmerge уже лежат в папке bin — ставить нич
 Windows SmartScreen может предупредить, что программа неизвестна (у неё нет
 платной подписи): «Подробнее» → «Выполнить в любом случае».
 
-Проект: https://github.com/MrJosu/liplock
+Как пользоваться, рецепты правил и разбор проверки — в README:
+https://github.com/MrJosu/liplock#быстрый-старт
 
 ----------------------------------------------------------------------------
 
@@ -30,3 +31,5 @@ LipLock for Windows
 
 Watch folder: Videos\LipLock\input, output: Videos\LipLock\output,
 settings: %APPDATA%\LipLock. ffmpeg and mkvmerge are bundled in bin.
+Guide, rule recipes and how to read the check:
+https://github.com/MrJosu/liplock/blob/main/README.en.md#quick-start
