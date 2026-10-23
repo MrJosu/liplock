@@ -60,7 +60,8 @@
 }
 :root[data-theme="light"] .lamp.ok,:root[data-theme="light"] .lamp.warn,:root[data-theme="light"] .lamp.err,:root[data-theme="light"] .lamp.busy{box-shadow:none}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--black);color:var(--text);font:400 14px/1.5 var(--font);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+html,body{margin:0;background:var(--black);color:var(--text);font:400 14px/1.5 var(--font);-webkit-font-smoothing:antialiased}
+.offset,.meter,.facts b,.tracks td,.chip,.job .phase,.ruler-legend,input[type=number],[data-elapsed]{font-variant-numeric:tabular-nums}
 button,input,select{font:inherit;color:inherit}
 ::selection{background:var(--amber);color:#000}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px}
@@ -182,6 +183,12 @@ input:disabled,select:disabled{opacity:.4}
 .draft .title{font-weight:600;font-size:15px;word-break:break-word;cursor:pointer}
 .draft .title:hover{color:var(--amber-ink)}
 .draft .what{color:var(--muted);font-size:12.5px;margin-top:2px;display:flex;gap:6px;flex-wrap:wrap}
+.qp{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 10px}
+.qp>span{font-size:12.5px;color:var(--muted);margin-right:2px}
+.qp button{border:1px solid var(--line);background:none;color:var(--muted);font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;cursor:pointer}
+.qp button:hover{color:var(--text);border-color:var(--faint)}
+.qp button.on{background:var(--amber-dim);border-color:var(--amber);color:var(--amber-ink)}
+.qp button small{font-weight:500;opacity:.75;margin-left:4px}
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:2px 8px;border-radius:5px;background:var(--black);border:1px solid var(--line-soft);color:var(--muted)}
 .chip b{color:var(--text);font-weight:600}
 .state{font-size:12.5px;color:var(--muted);white-space:nowrap;text-align:right}
@@ -446,6 +453,7 @@ const STR = {
   "ed.adddonor":["Добавить донор","Add donor"], "ed.result":["Результат","Result"], "ed.where":["Куда сохранить","Save to"],
   "ed.beside":["Рядом с основным файлом","Next to the main file"], "ed.tooutput":["В папку «Готовое»","To the output folder"],
   "th.group":["Тема","Theme"], "th.auto":["Как в системе","Follow the system"], "th.light":["Светлая","Light"], "th.dark":["Тёмная","Dark"],
+  "qp.take":["Взять:","Take:"], "qp.hint":["Отметить всю группу. Если уже отмечена — снять","Tick the whole group; if it is already ticked, untick it"], "qp.keep":["Оставить:","Keep:"], "qp.all":["Все","All"], "qp.audio":["Аудио","Audio"], "qp.subs":["Субтитры","Subtitles"],
   "cp.label":["DTS, TrueHD, FLAC, PCM из доноров","DTS, TrueHD, FLAC, PCM from donors"],
   "cp.off":["Оставить как есть","Keep as is"], "cp.replace":["Заменить на E-AC3","Replace with E-AC3"],
   "cp.add":["Добавить копию в E-AC3 рядом","Add an E-AC3 copy next to it"],
@@ -676,6 +684,29 @@ $("#pickMain").onclick = () => openPicker(L("pick.main"), async p => {
   renderEditor();
 });
 
+/* quick picks: tick or untick whole groups (all, audio, subtitles, one language) at once */
+function qpGroups(tracks){
+  const g = [["all", L("qp.all"), tracks]];
+  const a = tracks.filter(t => t.type==="audio"), s = tracks.filter(t => t.type==="subtitles");
+  if(a.length && s.length){ g.push(["audio", L("qp.audio"), a]); g.push(["subtitles", L("qp.subs"), s]); }
+  const langs = [...new Set(tracks.map(t => t.lang || "und"))];
+  if(langs.length > 1) langs.forEach(l => g.push(["lang:"+l, langName(l), tracks.filter(t => (t.lang||"und")===l)]));
+  return g;
+}
+function quickBar(tracks, isOn, scope, label){
+  if(tracks.length < 2) return "";
+  return `<div class="qp"><span>${label}</span>${qpGroups(tracks).map(([k, name, ts]) =>
+    `<button type="button" class="${ts.every(isOn)?"on":""}" title="${esc(L("qp.hint"))}" data-qp="${scope}|${k}">${esc(name)}<small>${ts.length}</small></button>`).join("")}</div>`;
+}
+function bindQuick(box, tracksOf, isOn, setOn, redraw){
+  box.querySelectorAll("[data-qp]").forEach(b => b.onclick = () => {
+    const [scope, k] = b.dataset.qp.split("|"), tracks = tracksOf(scope);
+    const grp = qpGroups(tracks).find(g => g[0] === k); if(!grp) return;
+    const turnOn = !grp[2].every(t => isOn(scope, t));     // all ticked → untick, otherwise tick all
+    grp[2].forEach(t => setOn(scope, t, turnOn));
+    redraw();
+  });
+}
 function trackTable(rows, head){ return `<div class="scroll"><table class="tracks"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>`; }
 const kindTag = t => `<span class="kind ${t.type}">${esc(L("k."+t.type)||t.type)}</span>`;
 const chTxt = t => t.channels ? L("ch",{n:t.channels}) : "";
@@ -686,6 +717,7 @@ function renderMain(){
   if(!m){ box.innerHTML = ""; return; }
   const v = m.tracks.find(t=>t.type==="video");
   box.innerHTML = `<div class="facts"><span>${L("f.duration")}<b>${fmtDur(m.duration)}</b></span><span>${L("f.size")}<b>${fmtSize(m.size)}</b></span>${v&&v.dims?`<span>${L("f.picture")}<b>${esc(v.dims)}</b></span>`:""}</div>`
+  + quickBar(m.tracks.filter(t => t.type!=="video"), t => t.keep, "m", L("qp.keep"))
   + trackTable(m.tracks.map(t => `<tr class="${t.keep?"":"off"}">
       <td class="c"><input type="checkbox" aria-label="${L("th.keep")} ${t.id}" data-keep="${t.id}" ${t.keep?"checked":""} ${t.type==="video"?"disabled":""}></td>
       <td class="c">${t.type==="audio"?`<input type="radio" name="dflt" aria-label="${L("th.def")}" value="main:${t.id}" ${t.keep?"":"disabled"}>`:""}</td>
@@ -694,6 +726,8 @@ function renderMain(){
       <td>${esc(langName(t.lang))}</td><td>${esc(t.name)}${t.default?` <span class="sub">${L("isdefault")}</span>`:""}</td></tr>`).join(""),
     `<th class="c">${L("th.keep")}</th><th class="c">${L("th.def")}</th><th>${L("th.type")}</th><th>${L("th.codec")}</th><th>${L("th.ch")}</th><th>${L("th.lang")}</th><th>${L("th.name")}</th>`);
   box.querySelectorAll("[data-keep]").forEach(cb => cb.onchange = () => { m.tracks.find(t => t.id == cb.dataset.keep).keep = cb.checked; renderMain(); renderSummary(); });
+  bindQuick(box, () => m.tracks.filter(t => t.type!=="video"), (s, t) => t.keep, (s, t, on) => { t.keep = on; },
+            () => { renderMain(); renderSummary(); });
   bindDefault();
 }
 
@@ -773,6 +807,7 @@ function renderDonors(){
     return `<div class="donor">
       <div class="donor-top"><div class="grow"><div class="nm">${esc(info.name)}</div><div class="sub">${fmtDur(info.duration)}, ${fmtSize(info.size)}</div></div>
         <button class="btn quiet sm" data-rm="${i}">${L("act.remove")}</button></div>
+      ${quickBar(info.tracks.filter(t => t.type==="audio" || t.type==="subtitles"), t => !!d.take[t.id], "d"+i, L("qp.take"))}
       ${trackTable(rows || `<tr><td colspan="8" class="sub">${L("nostreams")}</td></tr>`, `<th class="c">${L("th.take")}</th><th class="c">${L("th.def")}</th><th>${L("th.type")}</th><th>${L("th.codec")}</th><th>${L("th.ch")}</th><th>${L("th.lang")}</th><th>${L("th.name")}</th><th title="${esc(L("th.rel.t"))}">${L("th.rel")}</th>`)}
       <div class="sync">${rawBox}${sync}
         <div class="row" style="margin-top:12px;align-items:flex-end">
@@ -784,6 +819,12 @@ function renderDonors(){
       </div></div>`;
   }).join("");
   const at = s => s.split(":").map(Number);
+  const donorOf = scope => S.donors[+scope.slice(1)];
+  bindQuick(box, scope => donorOf(scope).info.tracks.filter(t => t.type==="audio" || t.type==="subtitles"),
+    (scope, t) => !!donorOf(scope).take[t.id],
+    (scope, t, on) => { const d = donorOf(scope);
+      if(on){ if(!d.take[t.id]) d.take[t.id] = {name:t.name, lang:t.lang, rel:relOf(d, t.id)}; } else delete d.take[t.id]; },
+    () => { renderDonors(); renderSummary(); });
   box.querySelectorAll("[data-take]").forEach(cb => cb.onchange = () => { const [i,id]=at(cb.dataset.take), d=S.donors[i], t=d.info.tracks.find(x=>x.id===id);
     if(cb.checked) d.take[id] = {name:t.name, lang:t.lang, rel:relOf(d, id)}; else delete d.take[id]; renderDonors(); renderSummary(); });
   box.querySelectorAll("[data-raw]").forEach(cb => cb.onchange = () => { const d = S.donors[+cb.dataset.raw]; d.raw = cb.checked;
